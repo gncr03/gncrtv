@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MY TV PLAYER</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0b0b14;color:#fff;font-family:Arial;height:100vh;overflow:hidden}
+.top{padding:12px 18px;background:#151524;display:flex;justify-content:space-between;align-items:center}.top h1{color:#00d4ff;font-size:22px}.top button{background:#333;color:#fff;border:none;padding:9px 16px;border-radius:8px;cursor:pointer}
+.box{max-width:480px;margin:30px auto;background:#222;padding:25px;border-radius:15px;text-align:center}
+.box input{width:100%;padding:14px;border-radius:8px;border:none;margin:10px 0;font-size:16px;text-align:center}
+.box button{width:100%;padding:14px;background:#00d4ff;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
+.macbox{background:#111;padding:12px;border-radius:10px;margin:10px 0;font-size:14px;word-break:break-all}.macbox b{color:#00d4ff;font-size:18px}
+.home{height:calc(100vh - 54px);display:flex;flex-direction:column;justify-content:center;padding:20px;max-width:1000px;margin:auto}
+.home h2{font-size:32px;text-align:center;margin-bottom:8px}.home p{text-align:center;color:#aaa;margin-bottom:25px}
+.homeGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.bigCard{border-radius:20px;padding:30px 20px;text-align:center;cursor:pointer;border:2px solid #2a2a40}
+.bigCard:hover{transform:scale(1.03);border-color:#00d4ff}
+.bigCard .icon{font-size:70px;display:block;margin-bottom:12px}
+.bigCard h3{font-size:26px;margin-bottom:6px}.bigCard p{color:#ddd;font-size:14px;margin:0}
+.bigCard small{display:block;margin-top:10px;color:#fff;opacity:.8;background:#00000040;padding:6px;border-radius:20px}
+.bigLive{background:linear-gradient(135deg,#ff2d55,#ff6b00)}.bigMovie{background:linear-gradient(135deg,#007aff,#00d4ff)}.bigSeries{background:linear-gradient(135deg,#7b2fff,#ff2fd6)}
+
+/* ★★★ GENİŞLETİLMİŞ ALAN ★★★ */
+.appLayout{display:flex;height:calc(100vh - 54px);gap:12px;padding:12px}
+.cats{width:280px;min-width:260px;background:#151524;border-radius:16px;padding:14px;overflow-y:auto;flex-shrink:0}
+.cats h3{font-size:14px;color:#888;margin:6px 0 12px;letter-spacing:1px}
+.cat{padding:15px 14px;border-radius:12px;cursor:pointer;margin-bottom:8px;background:#1e1e30;font-size:15px;display:flex;justify-content:space-between;align-items:center;line-height:1.3}
+.cat:hover{background:#2a2a45}
+.cat.active{background:#00d4ff;color:#000;font-weight:bold}
+.cat span{font-size:12px;opacity:.8;background:#00000033;padding:4px 10px;border-radius:20px;flex-shrink:0;margin-left:8px}
+.mid{width:380px;min-width:360px;background:#151524;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.midHead{padding:16px;border-bottom:1px solid #2a2a40}
+.midHead h3{font-size:19px;margin-bottom:10px}
+.midHead input{width:100%;padding:13px;border-radius:10px;border:none;background:#0b0b14;color:#fff;font-size:15px}
+.chanList{overflow-y:auto;flex:1;padding:12px}
+.chan{display:flex;align-items:center;gap:14px;padding:13px 12px;border-radius:12px;cursor:pointer;margin-bottom:9px;background:#1e1e30;min-height:72px;border:2px solid transparent}
+.chan:hover{border-color:#00d4ff;background:#24243a}
+.chan.playing{border:2px solid #00d4ff;background:#002a33}
+.chan img{width:56px;height:56px;object-fit:cover;background:#fff;border-radius:10px;flex-shrink:0}
+.chan span{font-size:15px;line-height:1.35;word-break:break-word;font-weight:500}
+.chan small{display:block;color:#999;font-size:12px;margin-top:3px;font-weight:400}
+.playerArea{flex:1;background:#000;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+video{width:100%;flex:1;background:#000;min-height:0;object-fit:contain}
+.playerInfo{padding:16px;background:#151524}
+.playerInfo b{color:#00d4ff;font-size:18px}.playerInfo p{color:#aaa;font-size:13px;margin-top:4px}
+.testBtn{background:#00ff88!important;color:#000!important;font-weight:bold;padding:11px 18px;border:none;border-radius:8px;cursor:pointer;margin:5px 5px 0 0}
+.redBtn{background:#ff5555;color:#fff;border:none;padding:11px 18px;border-radius:8px;cursor:pointer}
+.debug{background:#222;padding:10px;font-size:12px;color:#ffcc00;word-break:break-all;max-height:120px;overflow:auto}
+@media(max-width:1100px){.cats{width:230px;min-width:210px}.mid{width:320px;min-width:300px}}
+@media(max-width:850px){body{overflow:auto;height:auto}.home{height:auto}.homeGrid{grid-template-columns:1fr}.appLayout{flex-direction:column;height:auto}.cats{width:100%;max-height:220px}.mid{width:100%;height:480px}.playerArea{height:420px}}
+</style>
+</head>
+<body>
+<div class="top"><h1>📺 MY TV PLAYER</h1><button id="homeBtn" onclick="anaSayfa()" style="display:none">🏠 Ana Sayfa</button></div>
+
+<div id="loginBox" class="box">
+<h3>Cihaz MAC Adresin</h3>
+<div class="macbox">Senin MAC Adresin:<br><b id="myMac">Yükleniyor...</b><br><small>Bu kodu satıcıya ver</small></div>
+<input id="macInput" placeholder="AA:BB:CC:DD:EE:FF">
+<button onclick="girisYap()">GİRİŞ YAP</button>
+<p id="msg" style="margin-top:10px;color:#ff8888"></p>
+<button onclick="yeniMac()" style="margin-top:10px;background:#333;color:#fff">Yeni MAC Oluştur</button>
+</div>
+
+<div id="home" style="display:none">
+<div class="home">
+<h2>Ne izlemek istersin? 🍿</h2><p id="userInfoHome">Hoş geldin</p>
+<div class="homeGrid">
+<div class="bigCard bigLive" onclick="secMod('LIVE')"><span class="icon">📺</span><h3>CANLI TV</h3><p>Ulusal, Spor, Haber, Belgesel</p><small id="cntLive">Yükleniyor...</small></div>
+<div class="bigCard bigMovie" onclick="secMod('MOVIE')"><span class="icon">🎬</span><h3>FİLMLER</h3><p>En yeni filmler</p><small id="cntMovie">Yükleniyor...</small></div>
+<div class="bigCard bigSeries" onclick="secMod('SERIES')"><span class="icon">🎞️</span><h3>DİZİLER</h3><p>Yerli & Yabancı diziler</p><small id="cntSeries">Yükleniyor...</small></div>
+</div>
+</div>
+</div>
+
+<div id="app" style="display:none">
+<div class="appLayout">
+<div class="cats" id="cats"><h3>KATEGORİLER</h3></div>
+<div class="mid">
+<div class="midHead"><h3 id="baslik">Canlı TV</h3><input id="search" placeholder="Kanal ara..." oninput="applyFilter()"><div id="toplam" style="font-size:13px;color:#888;margin-top:10px"></div></div>
+<div class="chanList" id="list"></div>
+</div>
+<div class="playerArea">
+<video id="video" controls playsinline autoplay></video>
+<div class="playerInfo">
+<div><b id="nowPlaying">Kanal seç</b><p id="nowInfo">Ortadaki listeden bir yayın seç</p><p id="tryInfo" style="color:#00ff88;font-size:12px"></p></div>
+<div style="margin-top:10px">
+<button class="testBtn" onclick="testYayin()">✅ TEST YAYININI DENE</button>
+<button class="testBtn" onclick="sonrakiDene()" style="background:#00d4ff!important">🔁 SONRAKİ YÖNTEMİ DENE</button>
+<button class="redBtn" onclick="cikis()">Çıkış</button>
+</div>
+<div class="debug" id="debug">Debug: Hazır - Direkt m3u8 modu aktif ✅</div>
+</div>
+</div>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyC489wA_WRfKECPMmE76M1L873jh4so14k",
+  authDomain: "mytv-player.firebaseapp.com",
+  databaseURL: "https://mytv-player-default-rtdb.firebaseio.com",
+  projectId: "mytv-player",
+  storageBucket: "mytv-player.firebasestorage.app",
+  messagingSenderId: "670940222335",
+  appId: "1:670940222335:web:f0ab57def82173d0e5004a"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const WORKER_URL = '';
+let allItems=[], filtered=[], mode='LIVE', activeCat='TÜMÜ', hls=null, currentItem=null, tryIndex=0;
+const PROXY_LIST = [ u => 'https://corsproxy.io/?url=' + encodeURIComponent(u), u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u) ];
+function proxied(url, idx=0){ return PROXY_LIST[idx](url); }
+function workerUrl(u){ return WORKER_URL ? WORKER_URL + '?url=' + encodeURIComponent(u) : null; }
+function toM3U8(url){
+  if(!url) return url;
+  if(url.includes('.ts')) return url.replace('.ts', '.m3u8');
+  if(url.includes('/live/') && !url.includes('.m3u8') && !url.includes('.mp4') && !url.includes('.mkv')){
+    let clean = url.split('?')[0];
+    if(/\/\d+$/.test(clean)) return url + '.m3u8';
+  }
+  return url;
+}
+function log(t){ let d=document.getElementById('debug'); d.textContent='Debug: '+t; console.log(t); }
+function getMac(){ let m=localStorage.getItem('my_mac'); if(!m){ m=createMac(); localStorage.setItem('my_mac',m);} return m; }
+function createMac(){ return Array.from({length:6},()=>Math.floor(Math.random()*256).toString(16).padStart(2,'0')).join(':').toUpperCase(); }
+window.yeniMac=()=>{ let m=createMac(); localStorage.setItem('my_mac',m); document.getElementById('myMac').textContent=m; document.getElementById('macInput').value=m; }
+document.getElementById('myMac').textContent=getMac();
+document.getElementById('macInput').value=getMac();
+window.girisYap=()=>{
+  let mac=document.getElementById('macInput').value.trim().toUpperCase();
+  if(!mac) return document.getElementById('msg').textContent='MAC yaz!';
+  document.getElementById('msg').textContent='Kontrol ediliyor...';
+  onValue(ref(db,'users/'+mac.replaceAll(':','_')), async (snap)=>{
+    const user=snap.val();
+    if(!user){ document.getElementById('msg').textContent='Bu MAC için üyelik bulunamadı! Satıcına bu MAC adresini ver: '+mac; return; }
+    if(new Date(user.expire) < new Date()){ document.getElementById('msg').textContent='Üyeliğin bitmiş! Bitiş: '+user.expire; return; }
+    localStorage.setItem('login_mac',mac);
+    await kanallariYukle(user.playlist, mac, user);
+  });
+};
+async function fetchWithFallback(url){
+  let m3u8Url = url.replace('output=ts','output=m3u8').replace('output=TS','output=m3u8');
+  if(m3u8Url!==url) log('Playlist output=ts -> output=m3u8 çevrildi');
+  let tries=[m3u8Url, url];
+  if(WORKER_URL) tries.unshift(workerUrl(m3u8Url));
+  tries.push(...PROXY_LIST.map(f=>f(m3u8Url)));
+  for(let t of tries){
+    try{ let r=await fetch(t); if(r.ok){ log('Liste açıldı'); return await r.text(); } }catch(e){}
+  }
+  throw new Error('Liste açılmadı');
+}
+async function kanallariYukle(playlistUrl, mac, user){
+  document.getElementById('loginBox').style.display='none';
+  document.getElementById('home').style.display='block';
+  document.getElementById('homeBtn').style.display='block';
+  document.getElementById('userInfoHome').textContent='MAC: '+mac+' | Bitiş: '+user.expire;
+  if(allItems.length>0) return;
+  try{
+    log('Playlist yükleniyor (Direkt m3u8 modu)...');
+    let txt=await fetchWithFallback(playlistUrl);
+    let lines=txt.split('\n'); allItems=[];
+    for(let i=0;i<lines.length;i++){
+      if(lines[i].startsWith('#EXTINF')){
+        let line=lines[i]; let name=line.split(',').pop().trim();
+        let logo=(line.match(/tvg-logo="([^"]*)"/)||[])[1]||'';
+        let group=(line.match(/group-title="([^"]*)"/)||[])[1]||'DİĞER';
+        let rawUrl=lines[i+1]?.trim(); if(!rawUrl||rawUrl.startsWith('#')) continue;
+        let gUp=group.toUpperCase(); let itemMode='LIVE', cat=group.replace(/TR:/gi,'').trim().toUpperCase()||'DİĞER';
+        let url = rawUrl;
+        if(gUp.includes('MOVIE')||gUp.includes('FİLM')||gUp.includes('FILM')||gUp.includes('SINEMA')||gUp.includes('VOD')){ itemMode='MOVIE'; cat=group.replace(/.*FİLM.*:/i,'').replace(/TR:/gi,'').trim().toUpperCase()||'FİLMLER'; url = rawUrl; }
+        else if(gUp.includes('SERIES')||gUp.includes('DİZİ')||gUp.includes('DIZI')||gUp.includes('SERİ')){ itemMode='SERIES'; cat=group.replace(/.*DİZİ.*:/i,'').replace(/TR:/gi,'').trim().toUpperCase()||'DİZİLER'; url = rawUrl; }
+        else { url = toM3U8(rawUrl); if(cat.includes('ULUSAL')||cat.includes('TR ')) cat='ULUSAL'; else if(cat.includes('SPOR')||cat.includes('BEIN')||cat.includes('EXXEN')) cat='SPOR'; else if(cat.includes('HABER')||cat.includes('NEWS')) cat='HABER'; else if(cat.includes('BELGESEL')||cat.includes('DOC')) cat='BELGESEL'; else if(cat.includes('ÇOCUK')||cat.includes('CARTOON')) cat='ÇOCUK'; }
+        allItems.push({name,url,origUrl:rawUrl,logo,group:cat,mode:itemMode});
+      }
+    }
+    log('Toplam '+allItems.length+' yayın. İlk kanal m3u8: '+(allItems[0]?.url?.substring(0,100)||''));
+    document.getElementById('cntLive').textContent=allItems.filter(x=>x.mode==='LIVE').length+' yayın (m3u8)';
+    document.getElementById('cntMovie').textContent=allItems.filter(x=>x.mode==='MOVIE').length+' film';
+    document.getElementById('cntSeries').textContent=allItems.filter(x=>x.mode==='SERIES').length+' dizi';
+    if(allItems.length===0) alert('Liste boş geldi! Admin paneldeki linki kontrol et.');
+  }catch(e){ log('HATA: '+e.message); alert('Playlist açılmadı: '+e.message); }
+}
+window.anaSayfa=()=>{ document.getElementById('home').style.display='block'; document.getElementById('app').style.display='none'; };
+window.secMod=(m)=>{ mode=m; activeCat='TÜMÜ'; document.getElementById('home').style.display='none'; document.getElementById('app').style.display='block'; document.getElementById('baslik').textContent=m==='LIVE'?'📺 Canlı TV':m==='MOVIE'?'🎬 Filmler':'🎞️ Diziler'; renderCats(); applyFilter(); };
+function renderCats(){
+  let items=allItems.filter(x=>x.mode===mode); let counts={}; items.forEach(c=>counts[c.group]=(counts[c.group]||0)+1);
+  let cats=['TÜMÜ',...Object.keys(counts).sort()];
+  document.getElementById('cats').innerHTML='<h3>'+(mode==='LIVE'?'CANLI KATEGORİLER':mode==='MOVIE'?'FİLM KATEGORİLERİ':'DİZİ KATEGORİLERİ')+'</h3>'+cats.map(cat=>`<div class="cat ${cat===activeCat?'active':''}" onclick="secCat('${cat.replaceAll("'","")}')">${cat} <span>${cat==='TÜMÜ'?items.length:(counts[cat]||0)}</span></div>`).join('');
+}
+window.secCat=(cat)=>{ activeCat=cat; renderCats(); applyFilter(); };
+window.applyFilter=()=>{
+  let q=document.getElementById('search').value.toLowerCase().trim();
+  filtered=allItems.filter(c=>c.mode===mode && (activeCat==='TÜMÜ'||c.group===activeCat) && (!q||c.name.toLowerCase().includes(q)));
+  document.getElementById('toplam').textContent=filtered.length+' adet';
+  render();
+};
+function render(){
+  let d=document.getElementById('list'); d.innerHTML='';
+  if(filtered.length===0){ d.innerHTML='<p style="padding:15px;color:#aaa">Yayın yok</p>'; return; }
+  filtered.slice(0,1000).forEach(c=>{
+    let div=document.createElement('div'); div.className='chan'+(currentItem && c.url===currentItem.url?' playing':'');
+    div.innerHTML=`${c.logo?`<img src="${c.logo}" onerror="this.style.display='none'">`:`<div style="width:56px;height:56px;background:#00d4ff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">▶</div>`}<span>${c.name}<small>${c.group} • m3u8</small></span>`;
+    div.onclick=()=>oynat(c,0); d.appendChild(div);
+  });
+}
+window.testYayin=()=>{ log('Test yayını...'); oynat({name:'TEST YAYINI', url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', logo:'', group:'TEST', mode:'LIVE'}, 99); };
+window.sonrakiDene=()=>{ if(currentItem && tryIndex!==99){ tryIndex=(tryIndex+1)%4; oynat(currentItem, tryIndex); } };
+function oynat(c, attemptIdx=0){
+  if(attemptIdx===99){ currentItem=c; document.getElementById('nowPlaying').textContent='▶ TEST YAYINI'; playSingle(c.url, 'Test Direkt', null, null, 99); return; }
+  currentItem=c; tryIndex=attemptIdx;
+  let m3u8Url = c.mode==='LIVE' ? toM3U8(c.url) : c.url;
+  let attempts=[];
+  attempts.push({label:'Direkt m3u8', url: m3u8Url});
+  if(WORKER_URL) attempts.push({label:'Worker m3u8', url: workerUrl(m3u8Url)});
+  attempts.push({label:'Proxy1 m3u8', url: proxied(m3u8Url,0)});
+  attempts.push({label:'Proxy2 m3u8', url: proxied(m3u8Url,1)});
+  if(c.origUrl && c.origUrl!==m3u8Url) attempts.push({label:'Orijinal .ts', url: c.origUrl});
+  let a=attempts[attemptIdx % attempts.length];
+  document.getElementById('nowPlaying').textContent='▶ '+c.name;
+  document.getElementById('nowInfo').textContent='Kategori: '+c.group+' | Direkt m3u8 modu';
+  document.getElementById('tryInfo').textContent='Deneniyor: '+a.label+' ('+(attemptIdx%attempts.length+1)+'/'+attempts.length+')';
+  render();
+  playSingle(a.url, a.label, {...c, url:m3u8Url}, attempts, attemptIdx);
+}
+function playSingle(url, label, original=null, attempts=null, idx=0){
+  let v=document.getElementById('video');
+  try{ if(hls){hls.destroy();hls=null;} }catch(e){}
+  v.removeAttribute('src'); v.load();
+  log('Deneniyor: '+label+' -> '+url.substring(0,110));
+  let success=false;
+  let timer=setTimeout(()=>{ if(!success && original && attempts && idx+1<attempts.length){ log(label+' açılmadı, sonraki...'); oynat(original, idx+1); } }, 5000);
+  if(url.includes('.m3u8')){
+    if(Hls.isSupported()){
+      hls=new Hls({maxBufferLength:30,enableWorker:true});
+      hls.loadSource(url); hls.attachMedia(v);
+      hls.on(Hls.Events.MANIFEST_PARSED,()=>{ log('MANIFEST OK: '+label); v.play().catch(()=>{}); });
+      hls.on(Hls.Events.ERROR,(e,data)=>{ log('HLS Hata '+label+': '+data.details); if(data.fatal && !success){ clearTimeout(timer); if(original && attempts && idx+1<attempts.length) oynat(original, idx+1); } });
+    } else if(v.canPlayType('application/vnd.apple.mpegurl')){ v.src=url; v.play(); }
+  } else {
+    v.src=url; v.play().then(()=>{ success=true; clearTimeout(timer); log('✅ Video başladı: '+label); }).catch(e=>{ log('Video hatası: '+e.message); if(Hls.isSupported()){ hls=new Hls(); hls.loadSource(url); hls.attachMedia(v); hls.on(Hls.Events.MANIFEST_PARSED,()=>v.play()); } });
+  }
+  v.onplaying=()=>{ success=true; clearTimeout(timer); log('✅ VİDEO OYNATILIYOR! Yöntem: '+label); document.getElementById('tryInfo').textContent='✅ Açıldı! Yöntem: '+label; };
+  v.onerror=()=>{ log('Video onerror: '+label); };
+}
+window.cikis=()=>{ localStorage.removeItem('login_mac'); location.reload(); };
+window.onload=()=>{ let m=localStorage.getItem('login_mac'); if(m){ document.getElementById('macInput').value=m; window.girisYap(); } };
+</script>
+</body>
+</html>
