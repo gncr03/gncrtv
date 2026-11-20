@@ -1,0 +1,2 @@
+# gncrtv
+uygulama
