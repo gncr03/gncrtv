@@ -249,7 +249,6 @@
         </header>
 
         <main class="my-auto py-6 space-y-6">
-            <!-- 4 Ana Kategori Kartı: CANLI / FİLMLER / DİZİLER / RADYOLAR -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <button
                     type="button"
@@ -311,7 +310,6 @@
     <!-- EKRAN 3: SADE TV KUMANDASI UYUMLU IPTV OYNATICI EKRANI             -->
     <!-- ================================================================= -->
     <section id="screen-player" class="hidden flex-1 flex flex-col max-w-[1600px] w-full mx-auto px-3 sm:px-5 py-4 gap-4">
-        <!-- Player Top Bar -->
         <header class="bg-[#171717] border border-[#262626] rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
                 <button
@@ -344,7 +342,6 @@
             </div>
         </header>
 
-        <!-- Dört Ana İçerik Bölümü: CANLI / FİLMLER / DİZİLER / RADYOLAR -->
         <nav aria-label="İçerik Bölümleri" class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#171717] border border-[#262626] p-2 rounded-2xl">
             <button
                 type="button"
@@ -391,24 +388,17 @@
             </button>
         </nav>
 
-        <!-- Main Split: Left Categories + Channels List + Right Video Stage -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 items-start">
-            <!-- Left Sidebar: Categories Column (Left of Channels) + Channels Column -->
             <aside class="lg:col-span-5 xl:col-span-4 grid grid-cols-1 sm:grid-cols-12 gap-3 max-h-[78vh]">
-                <!-- Seçili Bölüme Ait Kategoriler (Kanalların Hemen Solunda) -->
                 <div class="sm:col-span-5 bg-[#171717] border border-[#262626] rounded-2xl p-3 flex flex-col gap-2 max-h-[78vh]">
                     <div class="flex items-center justify-between px-1 pb-1.5 border-b border-[#262626]">
                         <span class="text-[11px] font-mono uppercase tracking-wider text-[#9E9E9E]">Kategoriler</span>
                         <span id="active-category-summary" class="text-[10px] font-mono text-[#00D2FF] truncate">Tümü</span>
                     </div>
-                    <div id="category-tabs-container" class="flex-1 overflow-y-auto space-y-1 pr-0.5">
-                        <!-- Populated vertically to the left of channels -->
-                    </div>
+                    <div id="category-tabs-container" class="flex-1 overflow-y-auto space-y-1 pr-0.5"></div>
                 </div>
 
-                <!-- Kanal Listesi Sütunu -->
                 <div class="sm:col-span-7 bg-[#171717] border border-[#262626] rounded-2xl p-3 flex flex-col gap-3 max-h-[78vh]">
-                    <!-- Search Input -->
                     <div class="relative">
                         <i data-lucide="search" class="w-4 h-4 text-[#737373] absolute left-3 top-1/2 -translate-y-1/2"></i>
                         <input
@@ -420,7 +410,6 @@
                         >
                     </div>
 
-                    <!-- Quick Filter Pills -->
                     <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
                         <button
                             type="button"
@@ -448,16 +437,11 @@
                         </button>
                     </div>
 
-                    <!-- Scrollable Channel Items -->
-                    <div id="channel-list-container" class="flex-1 overflow-y-auto space-y-1.5 pr-1">
-                        <!-- Populated dynamically -->
-                    </div>
+                    <div id="channel-list-container" class="flex-1 overflow-y-auto space-y-1.5 pr-1"></div>
                 </div>
             </aside>
 
-            <!-- Right Main Stage: Video Player + Active Channel Bar -->
             <div class="lg:col-span-7 xl:col-span-8 space-y-3">
-                <!-- Video Stage -->
                 <div id="video-stage-wrapper" class="relative bg-black border border-[#262626] rounded-2xl overflow-hidden video-aspect-16-9 flex items-center justify-center">
                     <video
                         id="iptv-video"
@@ -467,7 +451,6 @@
                         class="w-full h-full object-contain bg-black"
                     ></video>
 
-                    <!-- Top Stage Overlay -->
                     <div class="pointer-events-none absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
                         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#101010]/85 backdrop-blur border border-[#262626] text-xs font-semibold text-white max-w-[70%] truncate">
                             <span class="w-2 h-2 rounded-full bg-[#10B981] shrink-0"></span>
@@ -478,7 +461,6 @@
                         </span>
                     </div>
 
-                    <!-- Instant Zap OSD Overlay -->
                     <div id="zap-osd-overlay" class="hidden pointer-events-none absolute inset-x-4 bottom-16 z-20 flex justify-center">
                         <div class="bg-[#101010]/90 backdrop-blur border border-[#00D2FF]/50 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-4 max-w-lg w-full">
                             <span id="zap-osd-number" class="font-mono text-sm font-extrabold px-2.5 py-1 rounded-lg bg-[#00D2FF]/15 text-[#00D2FF] shrink-0">
@@ -491,13 +473,11 @@
                         </div>
                     </div>
 
-                    <!-- Loading Spinner Overlay -->
                     <div id="player-loader" class="hidden pointer-events-none absolute inset-0 bg-[#101010]/75 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 z-10">
                         <div class="w-10 h-10 rounded-full border-4 border-[#262626] border-t-[#00D2FF] animate-spin"></div>
                         <span id="player-loader-text" class="text-xs font-medium text-[#E5E5E5]">Yayın akışı açılıyor...</span>
                     </div>
 
-                    <!-- Error / Fallback Overlay -->
                     <div id="player-error-overlay" class="hidden absolute inset-0 bg-[#101010]/95 p-5 sm:p-8 flex flex-col items-center justify-center text-center gap-4 z-20 overflow-y-auto">
                         <div class="w-12 h-12 rounded-2xl bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400">
                             <i data-lucide="alert-triangle" class="w-6 h-6"></i>
@@ -537,7 +517,6 @@
                     </div>
                 </div>
 
-                <!-- Active Channel Info & Remote/Player Controls Bar -->
                 <div class="bg-[#171717] border border-[#262626] rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <div id="channel-code-avatar" class="w-12 h-12 rounded-xl bg-[#101010] border border-[#262626] flex items-center justify-center font-mono font-extrabold text-xs text-[#00D2FF] shrink-0 overflow-hidden">
@@ -572,60 +551,149 @@
                             <i data-lucide="chevron-down" class="w-4 h-4 text-[#00D2FF]"></i>
                             <span>Sonraki</span>
                         </button>
-
                         <select
                             id="quality-select"
                             onchange="onQualityLevelChange(this.value)"
-                            aria-label="Kalite Seçimi"
                             class="tv-focus bg-[#101010] border border-[#262626] focus:border-[#00D2FF] rounded-xl px-2.5 py-2 text-xs font-mono text-white focus:outline-none"
                         >
                             <option value="-1">Oto Kalite</option>
                             <option value="1">Seviye 2 (720p HD)</option>
                             <option value="2">Seviye 3 (1080p FHD)</option>
                         </select>
-
-                        <button
-                            type="button"
-                            onclick="cycleAspectRatio()"
-                            title="En-Boy Oranı"
-                            class="tv-focus px-2.5 py-2 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-xs font-mono text-[#E5E5E5] transition"
-                        >
-                            <span id="aspect-ratio-label">16:9</span>
-                        </button>
-
                         <button
                             type="button"
                             id="btn-neighbor-prefetch"
                             onclick="toggleNeighborPrefetch()"
-                            title="Komşu Kanal Manifest Ön-Hazırlığı"
                             class="tv-focus px-2.5 py-2 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-[11px] font-mono text-[#A3A3A3] transition"
                         >
                             Ön-Hazırlık: Kapalı
                         </button>
-
+                        <button
+                            type="button"
+                            onclick="cycleAspectRatio()"
+                            class="tv-focus px-3 py-2 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-xs font-mono text-white transition"
+                        >
+                            <span id="aspect-ratio-label">16:9</span>
+                        </button>
                         <button
                             type="button"
                             id="btn-favorite-current"
                             onclick="toggleFavoriteCurrentChannel()"
                             title="Favorilere Ekle/Çıkar"
-                            class="tv-focus p-2.5 rounded-xl bg-[#101010] border border-[#262626] transition shrink-0 text-gray-400 hover:text-yellow-400"
+                            class="tv-focus p-2.5 rounded-xl bg-[#101010] border border-[#262626] text-gray-400 hover:text-yellow-400 transition shrink-0"
                         >
                             <span class="text-base leading-none">☆</span>
                         </button>
-
                         <button
                             type="button"
                             onclick="toggleStageFullscreen()"
                             title="Tam Ekran (F)"
-                            class="tv-focus p-2.5 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-white transition shrink-0"
+                            class="tv-focus px-3 py-2 rounded-xl bg-[#00D2FF] hover:bg-[#00B8E0] text-[#101010] font-bold text-xs flex items-center gap-1 transition"
                         >
-                            <i data-lucide="maximize" class="w-4 h-4"></i>
+                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                            <span>Tam Ekran</span>
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mac-iptv-shared-app';
+        let playerCloudDb = null;
+        let playerCloudUser = null;
+        let activeMacUnsubscribe = null;
+
+        async function initPlayerCloudAuth() {
+            try {
+                if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                playerCloudDb = getFirestore(app);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    const cred = await signInWithCustomToken(auth, __initial_auth_token);
+                    playerCloudUser = cred.user;
+                } else {
+                    const cred = await signInAnonymously(auth);
+                    playerCloudUser = cred.user;
+                }
+
+                if (playerCloudUser && deviceIdentity && deviceIdentity.mac) {
+                    window.__subscribeCloudMac(deviceIdentity.mac);
+                }
+            } catch (err) {
+                console.warn('Oynatıcı bulut bağlantısı başlatılamadı:', err);
+            }
+        }
+
+        function parseCloudDocToPlaylist(data, normMac) {
+            if (!data) return null;
+            let parsedChannels = [];
+            if (typeof data.channelsJson === 'string' && data.channelsJson) {
+                try { parsedChannels = JSON.parse(data.channelsJson); } catch (_) {}
+            } else if (Array.isArray(data.channels)) {
+                parsedChannels = data.channels;
+            }
+            return {
+                ...data,
+                mac: normMac,
+                channels: parsedChannels
+            };
+        }
+
+        window.__subscribeCloudMac = function(mac) {
+            if (!playerCloudDb || !playerCloudUser || !mac) return;
+            const normMac = normalizeMac(mac);
+            if (!normMac) return;
+
+            if (activeMacUnsubscribe) {
+                try { activeMacUnsubscribe(); } catch (_) {}
+                activeMacUnsubscribe = null;
+            }
+
+            const docId = normMac.replace(/:/g, '_');
+            const docRef = doc(playerCloudDb, 'artifacts', appId, 'public', 'data', 'mac_assignments', docId);
+            activeMacUnsubscribe = onSnapshot(docRef, (snap) => {
+                if (!snap.exists()) return;
+                const playlist = parseCloudDocToPlaylist(snap.data(), normMac);
+                if (!playlist) return;
+                try {
+                    localStorage.setItem(`${DEVICE_RECORD_PREFIX}${normMac}`, JSON.stringify({
+                        mac: normMac,
+                        deviceKey: playlist.deviceKey || '',
+                        playlist,
+                        updatedAt: Date.now()
+                    }));
+                } catch (_) {}
+                refreshFromPortal(false);
+            }, (err) => {
+                console.warn('MAC bulut dinleme hatası:', err);
+            });
+        };
+
+        window.__fetchCloudMacOnce = async function(mac) {
+            if (!playerCloudDb || !playerCloudUser || !mac) return null;
+            const normMac = normalizeMac(mac);
+            if (!normMac) return null;
+            try {
+                const docId = normMac.replace(/:/g, '_');
+                const snap = await getDoc(doc(playerCloudDb, 'artifacts', appId, 'public', 'data', 'mac_assignments', docId));
+                if (!snap.exists()) return null;
+                return parseCloudDocToPlaylist(snap.data(), normMac);
+            } catch (_) {
+                return null;
+            }
+        };
+
+        initPlayerCloudAuth();
+    </script>
 
     <script>
         // -----------------------------------------------------------------
@@ -793,18 +861,21 @@
             document.getElementById('player-active-mac').innerText = deviceIdentity.mac;
             const hubMac = document.getElementById('hub-mac-label');
             if (hubMac) hubMac.innerText = deviceIdentity.mac;
+            if (typeof window.__subscribeCloudMac === 'function' && deviceIdentity.mac) {
+                window.__subscribeCloudMac(deviceIdentity.mac);
+            }
         }
 
-        function findAssignmentForMac(targetMac) {
-            const norm = normalizeMac(targetMac);
-            if (!norm) return null;
+        function findAssignmentForMac(mac) {
+            const targetMac = normalizeMac(mac);
+            if (!targetMac) return null;
 
             try {
-                const perDeviceRaw = localStorage.getItem(`${DEVICE_RECORD_PREFIX}${norm}`);
-                if (perDeviceRaw) {
-                    const parsedDev = JSON.parse(perDeviceRaw);
+                const rawDevice = localStorage.getItem(`${DEVICE_RECORD_PREFIX}${targetMac}`);
+                if (rawDevice) {
+                    const parsedDev = JSON.parse(rawDevice);
                     if (parsedDev && parsedDev.playlist) {
-                        return { ...parsedDev.playlist, mac: norm };
+                        return { ...parsedDev.playlist, mac: targetMac };
                     }
                 }
             } catch (_) {}
@@ -813,11 +884,9 @@
                 const rawShared = localStorage.getItem(SHARED_REGISTRY_KEY) || localStorage.getItem(LEGACY_PORTAL_STORAGE_KEY);
                 if (rawShared) {
                     const parsed = JSON.parse(rawShared);
-                    const list = Array.isArray(parsed)
-                        ? parsed
-                        : (parsed && Array.isArray(parsed.entries) ? parsed.entries : []);
-                    const match = list.find(item => item && normalizeMac(item.mac) === norm);
-                    if (match) return { ...match, mac: norm };
+                    const list = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.entries) ? parsed.entries : []);
+                    const match = list.find(item => item && normalizeMac(item.mac) === targetMac);
+                    if (match) return { ...match, mac: targetMac };
                 }
             } catch (_) {}
 
@@ -825,52 +894,43 @@
         }
 
         function isPlaylistSourceUrl(url) {
-            if (!url || typeof url !== 'string') return false;
-            const lower = url.trim().toLowerCase();
-            if (/\/get\.php\b|\/playlist\.php\b|\/xmltv\.php\b/i.test(lower)) return true;
-            if (/[?&](type=m3u|type=m3u_plus|output=m3u8|output=ts|format=m3u8)\b/i.test(lower)) return true;
-            if (/\.(m3u|m3u8)($|[?#])/i.test(lower)) return true;
-            return false;
+            const u = String(url || '').toLowerCase();
+            return /get\.php\?|type=m3u|\.m3u($|[?#])/i.test(u) && !/\.m3u8($|[?#])/i.test(u);
         }
 
-        function normalizeCategoryLabel(rawGroup, name = '', url = '', section = 'live') {
-            const cleaned = String(rawGroup || '').replace(/\s+/g, ' ').trim();
-            if (cleaned && cleaned.toLowerCase() !== 'genel' && cleaned.toLowerCase() !== 'canlı liste') {
+        function classifyChannelSection(name, group, url) {
+            const text = `${name || ''} ${group || ''} ${url || ''}`.toLowerCase();
+            if (/radyo|radio|fm\b|trtfms|power\s*fm|kral\s*fm|best\s*fm|virgin\s*radio|slow\s*türk|joy\s*fm|metro\s*fm|number\s*one/i.test(text)) {
+                return 'radios';
+            }
+            if (/dizi|series|sezon|s\d{1,2}e\d{1,2}|bölüm|bolum|episode|netflix|blutv|exxen|gain|disney\+|amazon\s*prime/i.test(text)) {
+                return 'series';
+            }
+            if (/film|movie|vod|sinema|cinema|box\s*office|yerli\s*film|yabancı\s*film|aksiyon|komedi|korku|dram|animasyon|4k\s*film|\.mp4($|[?#])|\.mkv($|[?#])|\.avi($|[?#])/i.test(text)) {
+                return 'movies';
+            }
+            return 'live';
+        }
+
+        function normalizeCategoryLabel(rawGroup, name, url, section) {
+            const cleaned = String(rawGroup || '').trim();
+            if (cleaned && cleaned.toLowerCase() !== 'genel') {
                 return cleaned;
             }
-            const combined = `${cleaned} ${name} ${url}`.toLowerCase();
-            if (section === 'live') {
-                if (/yerel|bölgesel|local|il\b|şehir/i.test(combined)) return 'Yerel Kanallar';
-                if (/ulusal|tr\b|türkiye|turkey|ana kanal/i.test(combined)) return 'Ulusal Kanallar';
-                if (/spor|sport|beinsport|ssport|futbol|basket/i.test(combined)) return 'Spor';
-                if (/haber|news|24\b/i.test(combined)) return 'Haber';
-                if (/belgesel|doc|natgeo|discovery|tarih/i.test(combined)) return 'Belgesel';
-                if (/çocuk|kids|cartoon|animasyon/i.test(combined)) return 'Çocuk';
-                return 'Ulusal Kanallar';
-            }
-            if (section === 'movies') {
-                if (/aksiyon|action/i.test(combined)) return 'Aksiyon';
-                if (/gerilim|thriller|korku|horror/i.test(combined)) return 'Gerilim';
-                if (/komedi|comedy/i.test(combined)) return 'Komedi';
-                if (/dram|drama/i.test(combined)) return 'Dram';
-                if (/bilim kurgu|sci-fi|fantastik|fantasy/i.test(combined)) return 'Bilim Kurgu';
-                return 'Genel Filmler';
-            }
-            if (section === 'series') {
-                if (/aksiyon|action|suç|crime/i.test(combined)) return 'Aksiyon & Suç';
-                if (/dram|drama|romantik/i.test(combined)) return 'Dram';
-                if (/komedi|comedy/i.test(combined)) return 'Komedi';
-                if (/bilim kurgu|sci-fi|fantastik|fantasy/i.test(combined)) return 'Bilim Kurgu & Fantastik';
-                return 'Genel Diziler';
-            }
-            return cleaned || 'Genel Radyolar';
+            const map = {
+                live: 'Genel Canlı',
+                movies: 'Genel Filmler',
+                series: 'Genel Diziler',
+                radios: 'Genel Radyolar'
+            };
+            return map[section] || 'Genel';
         }
 
-        function parseM3UStringToChannels(m3uText, fallbackGroup = 'Ulusal Kanallar') {
-            const lines = (m3uText || '').split(/\r?\n/);
+        function parseM3UTextToChannels(content) {
+            const lines = String(content || '').split(/\r?\n/);
             const parsed = [];
             let pendingName = '';
-            let pendingGroup = fallbackGroup;
+            let pendingGroup = 'Genel';
             let pendingLogo = '';
 
             for (let i = 0; i < lines.length; i++) {
@@ -878,8 +938,8 @@
                 if (!line) continue;
 
                 if (line.startsWith('#EXTINF:')) {
-                    const grpMatch = line.match(/group-title="([^"]*)"/i);
-                    pendingGroup = (grpMatch && grpMatch[1]) ? grpMatch[1].trim() : fallbackGroup;
+                    const groupMatch = line.match(/group-title="([^"]*)"/i);
+                    pendingGroup = (groupMatch && groupMatch[1]) ? groupMatch[1].trim() : 'Genel';
 
                     const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
                     pendingLogo = (logoMatch && logoMatch[1]) ? logoMatch[1].trim() : '';
@@ -888,191 +948,105 @@
                     pendingName = commaIdx !== -1 ? line.slice(commaIdx + 1).trim() : '';
                 } else if (!line.startsWith('#') && /^(https?:\/\/|rtmp:\/\/|rtsp:\/\/)/i.test(line)) {
                     const idx = parsed.length + 1;
-                    const name = pendingName || `Kanal ${idx}`;
-                    const cleanCode = name.replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV';
-                    const section = classifyChannelSection(name, pendingGroup, line);
-                    const normalizedCategory = normalizeCategoryLabel(pendingGroup, name, line, section);
-                    const resolvedArtwork = buildArtworkUrl(pendingLogo, name, normalizedCategory, section, cleanCode);
+                    const chName = pendingName || `Kanal ${idx}`;
+                    const section = classifyChannelSection(chName, pendingGroup, line);
+                    const category = normalizeCategoryLabel(pendingGroup, chName, line, section);
                     parsed.push({
-                        id: `ch-${idx}-${name.slice(0, 8).replace(/\W/g, '')}`,
-                        name,
+                        id: `ch-${idx}-${Math.abs(hashString(line + chName))}`,
+                        name: chName,
                         url: line,
-                        group: normalizedCategory,
-                        category: normalizedCategory,
-                        logo: resolvedArtwork,
+                        group: pendingGroup || category,
+                        category,
                         section,
-                        code: cleanCode
+                        logo: pendingLogo,
+                        code: chName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV'
                     });
                     pendingName = '';
-                    pendingGroup = fallbackGroup;
+                    pendingGroup = 'Genel';
                     pendingLogo = '';
                 }
             }
             return parsed;
         }
 
-        function buildArtworkUrl(rawLogo, name, category, section, code) {
-            const trimmed = String(rawLogo || '').trim();
-            if (/^(https?:\/\/)/i.test(trimmed)) {
-                return trimmed;
+        function hashString(str) {
+            let h = 0;
+            for (let i = 0; i < str.length; i++) {
+                h = ((h << 5) - h) + str.charCodeAt(i);
+                h |= 0;
             }
-            const label = encodeURIComponent((name || code || 'TV').slice(0, 18));
-            if (section === 'movies') {
-                return `https://placehold.co/120x170/172538/38bdf8?text=${label}`;
-            }
-            if (section === 'series') {
-                return `https://placehold.co/120x170/1d2336/a5b4fc?text=${label}`;
-            }
-            if (section === 'radios') {
-                return `https://placehold.co/120x120/261d14/fbbf24?text=${label}`;
-            }
-            return `https://placehold.co/120x120/15202b/00D2FF?text=${label}`;
-        }
-
-        function renderChannelArtworkHtml(ch, isPosterSection = false) {
-            const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
-            const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec);
-            const fallbackUrl = buildArtworkUrl('', ch.name, cat, sec, ch.code || 'TV');
-            const srcUrl = ch.logo || fallbackUrl;
-            const sizeCls = isPosterSection ? 'w-11 h-16 rounded-lg' : 'w-11 h-11 rounded-xl';
-
-            return `
-                <img
-                    src="${escapeHtml(srcUrl)}"
-                    alt="${escapeHtml(ch.name)}"
-                    loading="lazy"
-                    onerror="if (this.dataset.fbApplied !== '1') { this.dataset.fbApplied = '1'; this.src = '${escapeHtml(fallbackUrl)}'; }"
-                    class="${sizeCls} object-cover bg-[#171717] border border-[#262626] shrink-0"
-                >
-            `;
-        }
-
-        function classifyChannelSection(name, group, url) {
-            const text = `${name || ''} ${group || ''} ${url || ''}`.toLowerCase();
-            if (/\/radio\b|radio|radyo|fm\b|am\b|podcast|\.(mp3|aac|ogg)($|[?#])/i.test(text)) {
-                return 'radios';
-            }
-            if (/\/series\b|series|dizi|sezon|s0\d|e0\d|episode|bölüm/i.test(text)) {
-                return 'series';
-            }
-            if (/\/movie\b|\/movies\b|\/vod\b|film|sinema|cinema|boxset|4k vod|\.(mkv|mp4|avi)($|[?#])/i.test(text)) {
-                return 'movies';
-            }
-            return 'live';
-        }
-
-        async function fetchPlaylistTextWithFallbacks(url) {
-            const attempts = [
-                url,
-                `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-                `https://corsproxy.io/?${encodeURIComponent(url)}`
-            ];
-
-            for (let i = 0; i < attempts.length; i++) {
-                try {
-                    const controller = new AbortController();
-                    const timer = setTimeout(() => controller.abort(), 5000);
-                    const resp = await fetch(attempts[i], { signal: controller.signal });
-                    clearTimeout(timer);
-                    if (!resp.ok) continue;
-                    const text = await resp.text();
-                    if (text && (text.includes('#EXTINF') || text.includes('#EXTM3U') || text.includes('http'))) {
-                        return text;
-                    }
-                } catch (_) {}
-            }
-            throw new Error('Liste içeriği çekilemedi (CORS veya sunucu erişim kısıtı).');
+            return h;
         }
 
         async function hydrateChannelsFromAssignment(assignment) {
             if (!assignment) return [];
 
+            if (assignment.fileContent && typeof assignment.fileContent === 'string' && assignment.fileContent.includes('#EXTINF')) {
+                const fromContent = parseM3UTextToChannels(assignment.fileContent);
+                if (fromContent.length > 0) return fromContent;
+            }
+
             if (Array.isArray(assignment.channels) && assignment.channels.length > 0) {
-                const hasRealStreamChannels = assignment.channels.some(ch => ch && ch.url && !isPlaylistSourceUrl(ch.url));
-                if (hasRealStreamChannels) {
+                const isSinglePlaceholder = assignment.channels.length === 1 && isPlaylistSourceUrl(assignment.channels[0].url);
+                if (!isSinglePlaceholder) {
                     return assignment.channels.map((ch, idx) => {
-                        const chName = ch.name || `Kanal ${idx + 1}`;
-                        const sec = ch.section || classifyChannelSection(chName, ch.group || ch.category, ch.url);
-                        const chGroup = normalizeCategoryLabel(ch.group || ch.category || '', chName, ch.url, sec);
-                        const chCode = ch.code || chName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV';
+                        const sec = ch.section || classifyChannelSection(ch.name, ch.group || ch.category, ch.url);
+                        const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec);
                         return {
+                            ...ch,
                             id: ch.id || `ch-${idx + 1}`,
-                            name: chName,
-                            url: ch.url,
-                            group: chGroup,
-                            category: chGroup,
-                            logo: buildArtworkUrl(ch.logo, chName, chGroup, sec, chCode),
                             section: sec,
-                            code: chCode
+                            category: cat,
+                            group: ch.group || cat,
+                            code: ch.code || (ch.name || 'TV').replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV'
                         };
                     });
                 }
             }
 
-            if (assignment.fileContent) {
-                const fromFile = parseM3UStringToChannels(assignment.fileContent, assignment.name || 'Ulusal Kanallar');
-                if (fromFile.length > 0) return fromFile;
-            }
-
-            const candidateUrl = assignment.url || '';
-            if (candidateUrl && isPlaylistSourceUrl(candidateUrl)) {
+            const fetchUrl = (assignment.url || '').trim();
+            if (fetchUrl && /^https?:\/\//i.test(fetchUrl) && isPlaylistSourceUrl(fetchUrl)) {
                 try {
-                    const rawM3U = await fetchPlaylistTextWithFallbacks(candidateUrl);
-                    const parsed = parseM3UStringToChannels(rawM3U, assignment.name || 'Ulusal Kanallar');
-                    if (parsed.length > 0) {
-                        return parsed;
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 5000);
+                    const res = await fetch(fetchUrl, { signal: controller.signal });
+                    clearTimeout(timer);
+                    if (res.ok) {
+                        const text = await res.text();
+                        const parsedRemote = parseM3UTextToChannels(text);
+                        if (parsedRemote.length > 0) return parsedRemote;
                     }
                 } catch (_) {}
             }
 
-            if (candidateUrl) {
-                const sec = classifyChannelSection(assignment.name || '', 'Ulusal Kanallar', candidateUrl);
-                const cat = normalizeCategoryLabel('', assignment.name || '', candidateUrl, sec);
-                return [{
-                    id: 'single-src-1',
-                    name: assignment.name || 'Canlı Yayın',
-                    url: candidateUrl,
-                    group: cat,
-                    category: cat,
-                    section: sec,
-                    code: 'M3U'
-                }];
+            if (Array.isArray(assignment.channels) && assignment.channels.length > 0) {
+                return assignment.channels.map((ch, idx) => {
+                    const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
+                    return {
+                        ...ch,
+                        id: ch.id || `ch-${idx + 1}`,
+                        section: sec,
+                        category: normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec),
+                        group: ch.group || 'Genel'
+                    };
+                });
             }
 
             return [];
         }
 
         function updateSectionCounts() {
-            let liveCount = 0;
-            let moviesCount = 0;
-            let seriesCount = 0;
-            let radiosCount = 0;
-
+            const counts = { live: 0, movies: 0, series: 0, radios: 0 };
             channels.forEach(ch => {
                 const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
-                if (sec === 'movies') moviesCount += 1;
-                else if (sec === 'series') seriesCount += 1;
-                else if (sec === 'radios') radiosCount += 1;
-                else liveCount += 1;
+                if (counts[sec] !== undefined) counts[sec] += 1;
             });
 
-            const setPair = (secId, hubId, val) => {
-                const el1 = document.getElementById(secId);
-                const el2 = document.getElementById(hubId);
-                if (el1) el1.innerText = String(val);
-                if (el2) el2.innerText = String(val);
-            };
-
-            setPair('section-count-live', 'hub-count-live', liveCount);
-            setPair('section-count-movies', 'hub-count-movies', moviesCount);
-            setPair('section-count-series', 'hub-count-series', seriesCount);
-            setPair('section-count-radios', 'hub-count-radios', radiosCount);
-        }
-
-        function getSectionChannels(sectionKey = activeContentSection) {
-            return channels.filter(ch => {
-                const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
-                return sec === sectionKey;
+            ['live', 'movies', 'series', 'radios'].forEach(key => {
+                const hubEl = document.getElementById(`hub-count-${key}`);
+                const secEl = document.getElementById(`section-count-${key}`);
+                if (hubEl) hubEl.innerText = String(counts[key]);
+                if (secEl) secEl.innerText = String(counts[key]);
             });
         }
 
@@ -1081,64 +1055,60 @@
             const summaryEl = document.getElementById('active-category-summary');
             if (!container) return;
 
-            const sectionItems = getSectionChannels(activeContentSection);
-            const catCounts = new Map();
-
-            sectionItems.forEach(ch => {
-                const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
-                const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec);
-                catCounts.set(cat, (catCounts.get(cat) || 0) + 1);
+            const sectionChannels = channels.filter(ch => (ch.section || classifyChannelSection(ch.name, ch.group, ch.url)) === activeContentSection);
+            const catMap = new Map();
+            sectionChannels.forEach(ch => {
+                const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, activeContentSection);
+                catMap.set(cat, (catMap.get(cat) || 0) + 1);
             });
 
-            if (activeCategoryFilter !== 'ALL' && !catCounts.has(activeCategoryFilter)) {
-                activeCategoryFilter = 'ALL';
-            }
-
             if (summaryEl) {
-                summaryEl.innerText = activeCategoryFilter === 'ALL'
-                    ? `Tüm Kategoriler (${sectionItems.length})`
-                    : `${activeCategoryFilter} (${catCounts.get(activeCategoryFilter) || 0})`;
+                summaryEl.innerText = activeCategoryFilter === 'ALL' ? `Tümü (${sectionChannels.length})` : activeCategoryFilter;
             }
 
-            const tabs = [
-                { key: 'ALL', label: 'Tümü', count: sectionItems.length },
-                ...Array.from(catCounts.entries()).map(([cat, count]) => ({
-                    key: cat,
-                    label: cat,
-                    count
-                }))
-            ];
-
-            container.innerHTML = tabs.map(tab => {
-                const isActive = activeCategoryFilter === tab.key;
+            const items = [['ALL', sectionChannels.length], ...Array.from(catMap.entries())];
+            container.innerHTML = items.map(([catKey, count]) => {
+                const isSelected = activeCategoryFilter === catKey;
+                const label = catKey === 'ALL' ? 'Tümü' : catKey;
                 return `
                     <button
                         type="button"
-                        onclick="setCategoryFilter('${escapeHtml(tab.key)}')"
-                        class="tv-focus w-full px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-between gap-2 text-left ${
-                            isActive
-                                ? 'bg-[#10B981] text-[#101010] font-extrabold'
-                                : 'bg-[#101010] hover:bg-[#222222] text-[#D4D4D4] hover:text-white border border-[#262626]'
+                        onclick="selectCategoryFilter('${escapeHtml(catKey)}')"
+                        class="tv-focus w-full px-2.5 py-2 rounded-xl text-left text-xs flex items-center justify-between gap-2 transition ${
+                            isSelected
+                                ? 'bg-[#00D2FF] text-[#101010] font-extrabold'
+                                : 'bg-[#101010] hover:bg-[#222222] text-[#D4D4D4] border border-[#262626]'
                         }"
                     >
-                        <span class="truncate">${escapeHtml(tab.label)}</span>
-                        <span class="font-mono text-[10px] px-1.5 py-0.5 rounded shrink-0 ${
-                            isActive ? 'bg-black/20 text-[#101010]' : 'bg-[#171717] text-[#9E9E9E]'
-                        }">${tab.count}</span>
+                        <span class="truncate">${escapeHtml(label)}</span>
+                        <span class="font-mono text-[10px] px-1.5 py-0.5 rounded ${isSelected ? 'bg-black/20 text-[#101010]' : 'bg-[#171717] text-[#9E9E9E]'}">${count}</span>
                     </button>
                 `;
             }).join('');
         }
 
-        function setCategoryFilter(categoryKey) {
-            activeCategoryFilter = categoryKey || 'ALL';
+        function selectCategoryFilter(catKey) {
+            activeCategoryFilter = catKey;
             renderCategoryTabs();
             renderChannelList();
+        }
 
-            const visible = getVisibleChannels();
-            if (visible.length > 0 && (!currentChannel || !visible.some(c => c.id === currentChannel.id))) {
-                playChannel(visible[0]);
+        function renderChannelArtworkHtml(channel, isPoster = false) {
+            const code = escapeHtml((channel && channel.code) || 'TV');
+            const sizeCls = isPoster ? 'w-9 h-12 rounded-lg' : 'w-9 h-9 rounded-lg';
+            if (channel && channel.logo && /^https?:\/\//i.test(channel.logo)) {
+                return `
+                    <div class="${sizeCls} bg-[#171717] border border-[#262626] flex items-center justify-center overflow-hidden shrink-0">
+                        <img src="${escapeHtml(channel.logo)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" class="w-full h-full object-contain">
+                        <span style="display:none" class="w-full h-full items-center justify-center font-mono text-[10px] font-bold text-[#00D2FF]">${code}</span>
+                    </div>
+                `;
             }
+            return `
+                <div class="${sizeCls} bg-[#171717] border border-[#262626] flex items-center justify-center font-mono text-[10px] font-bold text-[#00D2FF] shrink-0">
+                    ${code}
+                </div>
+            `;
         }
 
         function setContentSection(sectionKey, autoPlayFirst = true) {
@@ -1167,7 +1137,20 @@
         }
 
         async function refreshFromPortal(showFeedback = false) {
-            const found = findAssignmentForMac(deviceIdentity.mac);
+            let found = findAssignmentForMac(deviceIdentity.mac);
+            if (!found && typeof window.__fetchCloudMacOnce === 'function') {
+                found = await window.__fetchCloudMacOnce(deviceIdentity.mac);
+                if (found) {
+                    try {
+                        localStorage.setItem(`${DEVICE_RECORD_PREFIX}${normalizeMac(deviceIdentity.mac)}`, JSON.stringify({
+                            mac: normalizeMac(deviceIdentity.mac),
+                            deviceKey: found.deviceKey || '',
+                            playlist: found,
+                            updatedAt: Date.now()
+                        }));
+                    } catch (_) {}
+                }
+            }
             const titleEl = document.getElementById('mac-loaded-playlist-title');
             const actionEl = document.getElementById('mac-loaded-playlist-action');
             const hubListEl = document.getElementById('hub-current-list-name');
@@ -1609,7 +1592,7 @@
 
             if (!baseUrl) {
                 loader.classList.add('hidden');
-                showPlaybackError('', 'EMPTY_URL', 'Bu kanal için geçerli bir akış bağlantısı bulunmuyor.', sessionId);
+                showPlaybackError('', '', 'EMPTY_URL', 'Bu kanal için geçerli bir akış bağlantısı bulunmuyor.', sessionId);
                 return;
             }
 
@@ -1617,6 +1600,7 @@
                 loader.classList.add('hidden');
                 showPlaybackError(
                     baseUrl,
+                    baseKind,
                     'PLAYLIST_NOT_STREAM',
                     'Bu bağlantı doğrudan video akışı değil bir M3U/Xtream liste bağlantısıdır. Lütfen portal üzerinden yayın akışı içeren listeyi tanımlayın.',
                     sessionId
@@ -1636,38 +1620,34 @@
                 }
 
                 if (candidateIdx >= candidates.length) {
-                const isTsStream = baseKind.includes('TS Akışı') || /\.ts($|[?#])/i.test(baseUrl);
-                const isMixedContent = window.location.protocol === 'https:' && /^http:\/\//i.test(baseUrl);
-                let summaryReason = 'HLS (.m3u8) ve doğrudan medya denemeleri başarısız oldu (CORS, sunucu erişimi veya kodek kısıtı).';
+                    const isTsStream = baseKind.includes('TS Akışı') || /\.ts($|[?#])/i.test(baseUrl);
+                    const isMixedContent = window.location.protocol === 'https:' && /^http:\/\//i.test(baseUrl);
+                    let summaryReason = 'HLS (.m3u8) ve doğrudan medya denemeleri başarısız oldu (CORS, sunucu erişimi veya kodek kısıtı).';
 
-                if (isTsStream) {
-                    summaryReason = 'Tarayıcılar ham MPEG-TS (.ts) akışlarını doğrudan çözemez; .m3u8 HLS denemesi de yanıt vermedi. "Akış URL\'sini .m3u8 Olarak Dene" veya "Yeni Sekmede Aç" ile test edebilirsiniz.';
-                } else if (isMixedContent) {
-                    summaryReason = 'HTTPS üzerinden açılan sayfada HTTP yayın akışı Mixed Content veya CORS nedeniyle engellenmiş olabilir.';
+                    if (isTsStream) {
+                        summaryReason = 'Tarayıcılar ham MPEG-TS (.ts) akışlarını doğrudan çözemez; .m3u8 HLS denemesi de yanıt vermedi. "Akış URL\'sini .m3u8 Olarak Dene" veya "Yeni Sekmede Aç" ile test edebilirsiniz.';
+                    } else if (isMixedContent) {
+                        summaryReason = 'HTTPS üzerinden açılan sayfada HTTP yayın akışı Mixed Content veya CORS nedeniyle engellenmiş olabilir.';
+                    }
+
+                    showPlaybackError(
+                        baseUrl,
+                        baseKind,
+                        isTsStream ? 'TS_CODEC_OR_CORS' : 'STREAM_UNAVAILABLE',
+                        summaryReason,
+                        sessionId
+                    );
+                    return;
                 }
 
-                showPlaybackError(
-                    baseUrl,
-                    isTsStream ? 'TS_CODEC_OR_CORS' : 'STREAM_UNAVAILABLE',
-                    summaryReason,
-                    sessionId
-                );
-                return;
-            }
+                const cand = candidates[candidateIdx];
+                const candUrl = cand.url;
+                const candKind = detectStreamKind(candUrl);
+                const shouldUseHls = candKind.includes('HLS') || isHlsCandidateUrl(candUrl) || cand.label.includes('m3u8');
 
-            const cand = candidates[candidateIdx];
-            const candUrl = cand.url;
-            const candKind = detectStreamKind(candUrl);
-            const shouldUseHls = candKind.includes('HLS') || isHlsCandidateUrl(candUrl) || cand.label.includes('m3u8');
+                document.getElementById('stage-engine-badge').innerText = shouldUseHls ? 'HLS (.m3u8)' : candKind;
 
-            document.getElementById('stage-engine-badge').innerText = shouldUseHls ? 'HLS (.m3u8)' : candKind;
-            updateDiagnosticsUI(
-                candUrl,
-                shouldUseHls ? 'HLS (.m3u8)' : candKind,
-                `Deneniyor (${candidateIdx + 1}/${candidates.length}): ${cand.label}`
-            );
-
-            let candidateFinished = false;
+                let candidateFinished = false;
                 const advanceToNextCandidate = () => {
                     if (candidateFinished || sessionId !== playSessionId || sessionSignal.aborted) return;
                     candidateFinished = true;
@@ -1839,7 +1819,6 @@
                 if (channel) cacheWorkingStreamUrl(channel, url);
                 document.getElementById('stage-engine-badge').innerText = streamKind;
                 document.getElementById('channel-info-status').innerText = `${streamKind} • Oynatılıyor (${elapsedMs}ms)`;
-                updateDiagnosticsUI(url, streamKind, 'Medya akışı hızlı açıldı.', elapsedMs);
                 if (channel) scheduleNeighborManifestPrefetch(channel);
                 try {
                     const p = video.play();
@@ -1875,10 +1854,6 @@
             }
         }
 
-        function updateDiagnosticsUI() {
-            // Oynatıcı altındaki tanı kutucukları kaldırıldı.
-        }
-
         function showPlaybackError(url, streamKind, errCode, reasonText, sessionId = playSessionId) {
             if (sessionId !== playSessionId) return;
             hideZapOsd();
@@ -1888,7 +1863,6 @@
             document.getElementById('error-overlay-reason').innerText = reasonText;
             document.getElementById('error-overlay-url').innerText = url || 'URL bulunamadı';
             document.getElementById('channel-info-status').innerText = 'Hata / Erişilemedi';
-            updateDiagnosticsUI(url, streamKind, `${errCode}: ${reasonText}`);
         }
 
         function retryCurrentChannelPlayback() {
