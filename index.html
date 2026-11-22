@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAC IPTV Player — Cihaz Oynatıcısı</title>
+    <title>IPTV Player — Xtream Codes</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -140,6 +140,88 @@
             border-color: #fbbf24;
             box-shadow: 0 14px 30px rgba(245, 158, 11, 0.22);
         }
+
+        /* Android TV / TV Box: ana menü tek satır ve ekrana sığar */
+        #screen-hub {
+            width: 100%;
+            max-width: 1600px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            margin: 0 auto;
+            box-sizing: border-box;
+            justify-content: center;
+            padding: clamp(12px, 2.2vh, 28px) clamp(16px, 3vw, 48px);
+        }
+        #hub-main-menu {
+            width: 100%;
+            margin-top: auto;
+            margin-bottom: auto;
+            padding: clamp(14px, 3vh, 34px) 0;
+        }
+        #hub-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: clamp(10px, 1.8vw, 24px);
+            width: 100%;
+        }
+        #hub-menu-grid > button {
+            min-width: 0;
+            min-height: clamp(150px, 26vh, 260px);
+            padding: clamp(12px, 2vw, 28px);
+            gap: clamp(8px, 1.5vh, 16px);
+        }
+        #hub-menu-grid > button > div:first-child {
+            width: clamp(42px, 6vw, 68px);
+            height: clamp(42px, 6vw, 68px);
+            flex: 0 0 auto;
+        }
+        @media (max-width: 700px) {
+            #screen-hub { padding: 12px; }
+            #hub-menu-grid { gap: 7px; }
+            #hub-menu-grid > button { min-height: 112px; padding: 8px 4px; gap: 7px; }
+            #hub-menu-grid > button > div:first-child { width: 36px; height: 36px; }
+            #hub-menu-grid > button > div:first-child i { width: 22px; height: 22px; }
+            #hub-menu-grid > button > span:nth-of-type(1) { font-size: 10px; }
+            #hub-menu-grid > button > span:nth-of-type(2) { font-size: 10px; }
+            #screen-hub header { gap: 8px; }
+            #screen-hub header .text-lg { font-size: 15px; }
+            #screen-hub footer { font-size: 10px; }
+        }
+        @media (min-width: 701px) and (max-height: 600px) {
+            #screen-hub { padding-top: 8px; padding-bottom: 8px; }
+            #hub-main-menu { padding: 8px 0; }
+            #hub-menu-grid > button { min-height: 125px; }
+            #hub-menu-grid > button > div:first-child { width: 42px; height: 42px; }
+        }
+
+        /* Smarters düzeni: kategori | kanal listesi | yayın ekranı aynı satırda */
+        #player-content-grid {
+            display: grid;
+            grid-template-columns: minmax(145px, .78fr) minmax(220px, 1.12fr) minmax(260px, 1.35fr);
+            gap: 12px;
+            align-items: start;
+        }
+        #player-content-grid > section { min-width: 0; }
+        @media (max-width: 1023px) {
+            #screen-player { padding-left: 8px; padding-right: 8px; gap: 10px; }
+            #screen-player > header { padding: 10px 12px; }
+            #screen-player nav { position: sticky; top: 0; z-index: 30; }
+            #player-content-grid { grid-template-columns: minmax(132px, .78fr) minmax(190px, 1.12fr) minmax(220px, 1.3fr); gap: 8px; }
+            #player-content-grid > section { max-height: 70vh; min-height: 300px; }
+            #video-stage-wrapper { width: 100%; max-height: none; }
+            #category-tabs-container, #channel-list-container { min-height: 0; }
+            #category-tabs-container button { padding: 10px 7px !important; font-size: 11px !important; }
+            #channel-list-container > * { min-width: 0; }
+            #channel-list-container button { padding: 9px 7px !important; gap: 6px !important; }
+            #player-content-grid .player-column { max-height: none; min-height: 0; }
+        }
+        @media (max-width: 600px) {
+            #player-content-grid { grid-template-columns: minmax(118px, .75fr) minmax(165px, 1fr) minmax(190px, 1.15fr); overflow-x: auto; }
+            #player-content-grid > section { min-width: 118px; }
+            #screen-player nav button { padding-left: 6px; padding-right: 6px; font-size: 10px; }
+            #screen-player nav button span.font-mono { display: none; }
+            #screen-player .text-[11px].font-mono.uppercase { font-size: 9px; }
+        }
     </style>
 </head>
 <body class="bg-black text-[#F5F5F5] min-h-screen flex flex-col selection:bg-[#00D2FF]/30 selection:text-white">
@@ -148,77 +230,33 @@
     <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4 sm:px-0"></div>
 
     <!-- ================================================================= -->
-    <!-- EKRAN 1: SADE CİHAZ KİMLİĞİ EKRANI (MAC ADRESİ & ALTTAN ÇALMA LİSTESİ) -->
+    <!-- EKRAN 1: XTREAM CODES GİRİŞ EKRANI -->
     <!-- ================================================================= -->
     <section id="screen-device-identity" class="flex-1 flex flex-col items-center justify-center max-w-2xl w-full mx-auto px-4 py-10">
         <div class="w-full bg-[#171717] border border-[#262626] rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6 text-center">
-            <div class="space-y-3">
-                <span class="text-xs font-mono uppercase tracking-widest text-[#9E9E9E]">MAC Adresi</span>
-                <div id="display-mac-address" class="font-mono text-2xl sm:text-4xl font-extrabold tracking-widest text-[#00D2FF] select-all break-all">
-                    00:1A:79:00:00:00
-                </div>
-                <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
-                    <button
-                        type="button"
-                        onclick="regenerateDeviceMac()"
-                        class="tv-focus px-3 py-1.5 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-xs font-mono text-[#00D2FF] transition"
-                    >
-                        Yeni MAC Üret
-                    </button>
-                    <button
-                        type="button"
-                        onclick="toggleCustomMacEditor()"
-                        class="tv-focus px-3 py-1.5 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-xs font-mono text-[#E5E5E5] transition"
-                    >
-                        MAC Düzenle
-                    </button>
-                </div>
-
-                <div id="custom-mac-editor" class="hidden pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 max-w-md mx-auto">
-                    <input
-                        type="text"
-                        id="custom-mac-input"
-                        maxlength="17"
-                        placeholder="00:1A:79:XX:XX:XX"
-                        oninput="this.value = normalizeMac(this.value)"
-                        class="flex-1 bg-[#101010] border border-[#262626] focus:border-[#00D2FF] rounded-xl px-3 py-2 text-xs sm:text-sm font-mono uppercase text-white focus:outline-none"
-                    >
-                    <button
-                        type="button"
-                        onclick="applyCustomMacAddress()"
-                        class="tv-focus px-4 py-2 rounded-xl bg-[#00D2FF] text-[#101010] text-xs font-bold transition"
-                    >
-                        Kaydet
-                    </button>
-                </div>
+            <div class="space-y-2">
+                <div class="text-xs font-mono uppercase tracking-widest text-[#9E9E9E]">XTREAM CODES GİRİŞİ</div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">IPTV <span class="text-[#00D2FF]">PLAYER</span></h1>
+                <p class="text-xs text-[#737373]">Sunucu ve abonelik bilgilerinizi girerek bağlanın</p>
             </div>
-
-            <!-- MAC Adresinin Hemen Altında Sadece Yüklenen Çalma Listesi -->
-            <div class="pt-4 border-t border-[#262626]">
-                <button
-                    type="button"
-                    id="btn-open-assigned-player"
-                    onclick="openHubWithAssignedPlaylist()"
-                    class="tv-focus w-full bg-[#101010] hover:bg-[#1C1C1C] border border-[#262626] hover:border-[#10B981]/60 rounded-2xl px-5 py-4 transition flex items-center justify-between gap-3 text-left"
-                >
-                    <div class="min-w-0">
-                        <div class="text-[11px] font-mono uppercase tracking-wider text-[#737373]">Yüklü Çalma Listesi</div>
-                        <div id="mac-loaded-playlist-title" class="text-sm sm:text-base font-bold text-[#10B981] truncate mt-0.5">
-                            Henüz liste yüklenmedi
-                        </div>
-                    </div>
-                    <span id="mac-loaded-playlist-action" class="shrink-0 text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-[#10B981]/15 text-[#10B981]">
-                        AÇ
-                    </span>
-                </button>
+            <div class="space-y-3 text-left">
+                <label class="block text-[11px] font-mono uppercase tracking-wider text-[#9E9E9E]" for="xtream-server">Sunucu URL</label>
+                <input id="xtream-server" type="url" inputmode="url" autocomplete="url" placeholder="http://sunucu-adresi:port" class="w-full bg-[#101010] border border-[#303030] focus:border-[#00D2FF] rounded-xl px-4 py-3 text-sm text-white outline-none" />
+                <label class="block text-[11px] font-mono uppercase tracking-wider text-[#9E9E9E] pt-2" for="xtream-username">Kullanıcı adı</label>
+                <input id="xtream-username" type="text" autocomplete="username" placeholder="Kullanıcı adınız" class="w-full bg-[#101010] border border-[#303030] focus:border-[#00D2FF] rounded-xl px-4 py-3 text-sm text-white outline-none" />
+                <label class="block text-[11px] font-mono uppercase tracking-wider text-[#9E9E9E] pt-2" for="xtream-password">Şifre</label>
+                <input id="xtream-password" type="password" autocomplete="current-password" placeholder="Şifreniz" class="w-full bg-[#101010] border border-[#303030] focus:border-[#00D2FF] rounded-xl px-4 py-3 text-sm text-white outline-none" />
+                <label class="flex items-center gap-2 pt-1 text-xs text-[#BDBDBD]"><input id="xtream-remember" type="checkbox" class="accent-[#00D2FF]" /> Giriş bilgilerimi bu cihazda hatırla</label>
             </div>
+            <button type="button" id="xtream-login-button" onclick="loginXtream()" class="tv-focus w-full rounded-xl bg-[#00D2FF] hover:bg-[#39dcff] text-[#101010] font-extrabold tracking-wide py-3.5 transition">GİRİŞ YAP</button>
+            <p id="xtream-login-status" class="min-h-5 text-xs text-[#737373]" aria-live="polite">Bağlanmak için Xtream Codes bilgilerinizi girin.</p>
         </div>
     </section>
 
     <!-- ================================================================= -->
     <!-- EKRAN 2: KARŞILAMA MERKEZİ (CANLI / FİLMLER / DİZİLER / RADYOLAR) -->
     <!-- ================================================================= -->
-    <section id="screen-hub" class="hidden flex-1 flex flex-col justify-between max-w-5xl w-full mx-auto px-4 py-6 sm:py-8 bg-black rounded-3xl my-3 border border-[#1f1f1f]">
+    <section id="screen-hub" class="hidden flex flex-col justify-between bg-black border border-[#1f1f1f]">
         <header class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#1f1f1f]">
             <button
                 type="button"
@@ -226,7 +264,7 @@
                 class="tv-focus px-3.5 py-2 rounded-xl bg-[#122030] hover:bg-[#182a3f] border border-[#26384d] text-xs font-semibold text-white flex items-center gap-1.5 transition"
             >
                 <i data-lucide="arrow-left" class="w-4 h-4 text-[#38bdf8]"></i>
-                <span>MAC Adresi</span>
+                <span>Giriş Ekranı</span>
             </button>
 
             <div class="text-center space-y-0.5">
@@ -248,8 +286,9 @@
             </button>
         </header>
 
-        <main class="my-auto py-6 space-y-6">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <main id="hub-main-menu">
+            <!-- Ana menü: TV ekranında tek satır -->
+            <div id="hub-menu-grid">
                 <button
                     type="button"
                     onclick="openSectionInPlayer('live')"
@@ -301,7 +340,7 @@
         </main>
 
         <footer class="pt-4 border-t border-[#1f1f1f] flex flex-wrap items-center justify-between gap-2 text-xs text-[#94a3b8]">
-            <span>MAC: <span id="hub-mac-label" class="font-mono text-white font-semibold">00:1A:79:00:00:00</span></span>
+            <span>Xtream: <span id="hub-mac-label" class="font-mono text-white font-semibold">Bağlı</span></span>
             <span>Kumanda OK tuşu ile bölüm seçin • Geri tuşu ile çıkın</span>
         </footer>
     </section>
@@ -310,6 +349,7 @@
     <!-- EKRAN 3: SADE TV KUMANDASI UYUMLU IPTV OYNATICI EKRANI             -->
     <!-- ================================================================= -->
     <section id="screen-player" class="hidden flex-1 flex flex-col max-w-[1600px] w-full mx-auto px-3 sm:px-5 py-4 gap-4">
+        <!-- Player Top Bar -->
         <header class="bg-[#171717] border border-[#262626] rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-3 min-w-0">
                 <button
@@ -323,7 +363,7 @@
 
                 <div class="min-w-0">
                     <div class="flex items-center gap-2">
-                        <span id="player-active-mac" class="font-mono text-xs sm:text-sm font-bold text-[#00D2FF] truncate">00:1A:79:00:00:00</span>
+                        <span id="player-active-mac" class="font-mono text-xs sm:text-sm font-bold text-[#00D2FF] truncate">Xtream</span>
                         <span class="text-[#525252]">•</span>
                         <span id="player-playlist-name" class="text-xs sm:text-sm font-semibold text-white truncate">Yayın Listesi</span>
                     </div>
@@ -342,6 +382,7 @@
             </div>
         </header>
 
+        <!-- Dört Ana İçerik Bölümü: CANLI / FİLMLER / DİZİLER / RADYOLAR -->
         <nav aria-label="İçerik Bölümleri" class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#171717] border border-[#262626] p-2 rounded-2xl">
             <button
                 type="button"
@@ -388,17 +429,22 @@
             </button>
         </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 items-start">
-            <aside class="lg:col-span-5 xl:col-span-4 grid grid-cols-1 sm:grid-cols-12 gap-3 max-h-[78vh]">
-                <div class="sm:col-span-5 bg-[#171717] border border-[#262626] rounded-2xl p-3 flex flex-col gap-2 max-h-[78vh]">
+        <!-- Main Split: Kategoriler solda, kanallar ortada, oynatıcı sağ üstte -->
+        <div id="player-content-grid" class="flex-1">
+            <!-- Kategoriler: en sol sütun -->
+            <section class="bg-[#171717] border border-[#262626] rounded-2xl p-2 sm:p-3 flex flex-col gap-2 max-h-[78vh] min-h-[320px] min-w-0">
                     <div class="flex items-center justify-between px-1 pb-1.5 border-b border-[#262626]">
                         <span class="text-[11px] font-mono uppercase tracking-wider text-[#9E9E9E]">Kategoriler</span>
                         <span id="active-category-summary" class="text-[10px] font-mono text-[#00D2FF] truncate">Tümü</span>
                     </div>
-                    <div id="category-tabs-container" class="flex-1 overflow-y-auto space-y-1 pr-0.5"></div>
-                </div>
+                    <div id="category-tabs-container" class="flex-1 overflow-y-auto space-y-1 pr-0.5">
+                        <!-- Populated vertically to the left of channels -->
+                    </div>
+            </section>
 
-                <div class="sm:col-span-7 bg-[#171717] border border-[#262626] rounded-2xl p-3 flex flex-col gap-3 max-h-[78vh]">
+            <!-- Kanallar: kategorilerin hemen sağında -->
+            <section class="bg-[#171717] border border-[#262626] rounded-2xl p-2 sm:p-3 flex flex-col gap-2 max-h-[78vh] min-h-[320px] min-w-0">
+                    <!-- Search Input -->
                     <div class="relative">
                         <i data-lucide="search" class="w-4 h-4 text-[#737373] absolute left-3 top-1/2 -translate-y-1/2"></i>
                         <input
@@ -406,16 +452,21 @@
                             id="channel-search-input"
                             oninput="onChannelFilterChange()"
                             placeholder="Kanal ara..."
+                            readonly
+                            inputmode="none"
+                            autocomplete="off"
+                            aria-label="Kanal arama alanı (TV kumandasında otomatik klavye kapalı)"
                             class="tv-focus w-full bg-[#101010] border border-[#262626] focus:border-[#00D2FF] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-[#525252] focus:outline-none transition"
                         >
                     </div>
 
-                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                    <!-- Quick Filter Pills -->
+                    <div class="flex items-center gap-1 overflow-x-auto pb-1">
                         <button
                             type="button"
                             id="filter-pill-all"
                             onclick="setChannelFilterMode('all')"
-                            class="tv-focus px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-[#00D2FF] text-[#101010] shrink-0 transition"
+                            class="tv-focus px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-semibold bg-[#00D2FF] text-[#101010] shrink-0 transition"
                         >
                             Tümü
                         </button>
@@ -423,7 +474,7 @@
                             type="button"
                             id="filter-pill-fav"
                             onclick="setChannelFilterMode('favorites')"
-                            class="tv-focus px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-[#101010] hover:bg-[#222222] text-[#A3A3A3] hover:text-white border border-[#262626] shrink-0 transition"
+                            class="tv-focus px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-semibold bg-[#101010] hover:bg-[#222222] text-[#A3A3A3] hover:text-white border border-[#262626] shrink-0 transition"
                         >
                             Favoriler
                         </button>
@@ -431,17 +482,21 @@
                             type="button"
                             id="filter-pill-hls"
                             onclick="setChannelFilterMode('hls')"
-                            class="tv-focus px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-[#101010] hover:bg-[#222222] text-[#A3A3A3] hover:text-white border border-[#262626] shrink-0 transition"
+                            class="tv-focus px-2 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-semibold bg-[#101010] hover:bg-[#222222] text-[#A3A3A3] hover:text-white border border-[#262626] shrink-0 transition"
                         >
                             .m3u8
                         </button>
                     </div>
 
-                    <div id="channel-list-container" class="flex-1 overflow-y-auto space-y-1.5 pr-1"></div>
-                </div>
-            </aside>
+                    <!-- Scrollable Channel Items -->
+                    <div id="channel-list-container" class="flex-1 overflow-y-auto space-y-1.5 pr-1">
+                        <!-- Populated dynamically -->
+                    </div>
+            </section>
 
-            <div class="lg:col-span-7 xl:col-span-8 space-y-3">
+            <!-- Oynatıcı: kanal listesinin hemen sağında -->
+            <section class="player-column space-y-2 lg:space-y-3 min-w-0">
+                <!-- Video Stage -->
                 <div id="video-stage-wrapper" class="relative bg-black border border-[#262626] rounded-2xl overflow-hidden video-aspect-16-9 flex items-center justify-center">
                     <video
                         id="iptv-video"
@@ -451,6 +506,7 @@
                         class="w-full h-full object-contain bg-black"
                     ></video>
 
+                    <!-- Top Stage Overlay -->
                     <div class="pointer-events-none absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-10">
                         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#101010]/85 backdrop-blur border border-[#262626] text-xs font-semibold text-white max-w-[70%] truncate">
                             <span class="w-2 h-2 rounded-full bg-[#10B981] shrink-0"></span>
@@ -461,6 +517,7 @@
                         </span>
                     </div>
 
+                    <!-- Instant Zap OSD Overlay -->
                     <div id="zap-osd-overlay" class="hidden pointer-events-none absolute inset-x-4 bottom-16 z-20 flex justify-center">
                         <div class="bg-[#101010]/90 backdrop-blur border border-[#00D2FF]/50 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-4 max-w-lg w-full">
                             <span id="zap-osd-number" class="font-mono text-sm font-extrabold px-2.5 py-1 rounded-lg bg-[#00D2FF]/15 text-[#00D2FF] shrink-0">
@@ -473,11 +530,13 @@
                         </div>
                     </div>
 
+                    <!-- Loading Spinner Overlay -->
                     <div id="player-loader" class="hidden pointer-events-none absolute inset-0 bg-[#101010]/75 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 z-10">
                         <div class="w-10 h-10 rounded-full border-4 border-[#262626] border-t-[#00D2FF] animate-spin"></div>
                         <span id="player-loader-text" class="text-xs font-medium text-[#E5E5E5]">Yayın akışı açılıyor...</span>
                     </div>
 
+                    <!-- Error / Fallback Overlay -->
                     <div id="player-error-overlay" class="hidden absolute inset-0 bg-[#101010]/95 p-5 sm:p-8 flex flex-col items-center justify-center text-center gap-4 z-20 overflow-y-auto">
                         <div class="w-12 h-12 rounded-2xl bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400">
                             <i data-lucide="alert-triangle" class="w-6 h-6"></i>
@@ -517,6 +576,7 @@
                     </div>
                 </div>
 
+                <!-- Active Channel Info & Remote/Player Controls Bar -->
                 <div class="bg-[#171717] border border-[#262626] rounded-2xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
                         <div id="channel-code-avatar" class="w-12 h-12 rounded-xl bg-[#101010] border border-[#262626] flex items-center justify-center font-mono font-extrabold text-xs text-[#00D2FF] shrink-0 overflow-hidden">
@@ -551,170 +611,66 @@
                             <i data-lucide="chevron-down" class="w-4 h-4 text-[#00D2FF]"></i>
                             <span>Sonraki</span>
                         </button>
+
                         <select
                             id="quality-select"
                             onchange="onQualityLevelChange(this.value)"
+                            aria-label="Kalite Seçimi"
                             class="tv-focus bg-[#101010] border border-[#262626] focus:border-[#00D2FF] rounded-xl px-2.5 py-2 text-xs font-mono text-white focus:outline-none"
                         >
                             <option value="-1">Oto Kalite</option>
                             <option value="1">Seviye 2 (720p HD)</option>
                             <option value="2">Seviye 3 (1080p FHD)</option>
                         </select>
+
+                        <button
+                            type="button"
+                            onclick="cycleAspectRatio()"
+                            title="En-Boy Oranı"
+                            class="tv-focus px-2.5 py-2 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-xs font-mono text-[#E5E5E5] transition"
+                        >
+                            <span id="aspect-ratio-label">16:9</span>
+                        </button>
+
                         <button
                             type="button"
                             id="btn-neighbor-prefetch"
                             onclick="toggleNeighborPrefetch()"
+                            title="Komşu Kanal Manifest Ön-Hazırlığı"
                             class="tv-focus px-2.5 py-2 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-[11px] font-mono text-[#A3A3A3] transition"
                         >
                             Ön-Hazırlık: Kapalı
                         </button>
-                        <button
-                            type="button"
-                            onclick="cycleAspectRatio()"
-                            class="tv-focus px-3 py-2 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-xs font-mono text-white transition"
-                        >
-                            <span id="aspect-ratio-label">16:9</span>
-                        </button>
+
                         <button
                             type="button"
                             id="btn-favorite-current"
                             onclick="toggleFavoriteCurrentChannel()"
                             title="Favorilere Ekle/Çıkar"
-                            class="tv-focus p-2.5 rounded-xl bg-[#101010] border border-[#262626] text-gray-400 hover:text-yellow-400 transition shrink-0"
+                            class="tv-focus p-2.5 rounded-xl bg-[#101010] border border-[#262626] transition shrink-0 text-gray-400 hover:text-yellow-400"
                         >
                             <span class="text-base leading-none">☆</span>
                         </button>
+
                         <button
                             type="button"
                             onclick="toggleStageFullscreen()"
                             title="Tam Ekran (F)"
-                            class="tv-focus px-3 py-2 rounded-xl bg-[#00D2FF] hover:bg-[#00B8E0] text-[#101010] font-bold text-xs flex items-center gap-1 transition"
+                            class="tv-focus p-2.5 rounded-xl bg-[#101010] hover:bg-[#222222] border border-[#262626] text-white transition shrink-0"
                         >
-                            <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
-                            <span>Tam Ekran</span>
+                            <i data-lucide="maximize" class="w-4 h-4"></i>
                         </button>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </section>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mac-iptv-shared-app';
-        let playerCloudDb = null;
-        let playerCloudUser = null;
-        let activeMacUnsubscribe = null;
-        let playerCloudReady = false;
-
-        async function initPlayerCloudAuth() {
-            try {
-                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
-                    playerCloudReady = false;
-                    return;
-                }
-                const firebaseConfig = typeof __firebase_config === 'string'
-                    ? JSON.parse(__firebase_config)
-                    : __firebase_config;
-                if (!firebaseConfig || !firebaseConfig.apiKey) return;
-
-                const app = initializeApp(firebaseConfig);
-                const auth = getAuth(app);
-                playerCloudDb = getFirestore(app);
-
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    const cred = await signInWithCustomToken(auth, __initial_auth_token);
-                    playerCloudUser = cred.user;
-                } else {
-                    const cred = await signInAnonymously(auth);
-                    playerCloudUser = cred.user;
-                }
-
-                playerCloudReady = Boolean(playerCloudUser && playerCloudDb);
-
-                if (playerCloudReady && deviceIdentity && deviceIdentity.mac) {
-                    window.__subscribeCloudMac(deviceIdentity.mac);
-                    refreshFromPortal(false);
-                }
-            } catch (err) {
-                console.warn('Oynatıcı bulut bağlantısı başlatılamadı:', err);
-            }
-        }
-
-        function parseCloudDocToPlaylist(data, normMac) {
-            if (!data) return null;
-            let parsedChannels = [];
-            if (typeof data.channelsJson === 'string' && data.channelsJson) {
-                try { parsedChannels = JSON.parse(data.channelsJson); } catch (_) {}
-            } else if (Array.isArray(data.channels)) {
-                parsedChannels = data.channels;
-            }
-            return {
-                ...data,
-                mac: normMac,
-                channels: parsedChannels
-            };
-        }
-
-        window.__subscribeCloudMac = function(mac) {
-            if (!playerCloudDb || !playerCloudUser || !mac) return;
-            const normMac = normalizeMac(mac);
-            if (!normMac) return;
-
-            if (activeMacUnsubscribe) {
-                try { activeMacUnsubscribe(); } catch (_) {}
-                activeMacUnsubscribe = null;
-            }
-
-            const docId = normMac.replace(/:/g, '_');
-            const docRef = doc(playerCloudDb, 'artifacts', appId, 'public', 'data', 'mac_assignments', docId);
-            activeMacUnsubscribe = onSnapshot(docRef, (snap) => {
-                if (!snap.exists()) return;
-                const playlist = parseCloudDocToPlaylist(snap.data(), normMac);
-                if (!playlist) return;
-                try {
-                    localStorage.setItem(`${DEVICE_RECORD_PREFIX}${normMac}`, JSON.stringify({
-                        mac: normMac,
-                        deviceKey: playlist.deviceKey || '',
-                        playlist,
-                        updatedAt: Date.now()
-                    }));
-                } catch (_) {}
-                refreshFromPortal(false);
-            }, (err) => {
-                console.warn('MAC bulut dinleme hatası:', err);
-            });
-        };
-
-        window.__fetchCloudMacOnce = async function(mac) {
-            if (!playerCloudDb || !playerCloudUser || !mac) return null;
-            const normMac = normalizeMac(mac);
-            if (!normMac) return null;
-            try {
-                const docId = normMac.replace(/:/g, '_');
-                const snap = await getDoc(doc(playerCloudDb, 'artifacts', appId, 'public', 'data', 'mac_assignments', docId));
-                if (!snap.exists()) return null;
-                return parseCloudDocToPlaylist(snap.data(), normMac);
-            } catch (_) {
-                return null;
-            }
-        };
-
-        window.__isPlayerCloudReady = function() {
-            return playerCloudReady;
-        };
-
-        initPlayerCloudAuth();
-    </script>
 
     <script>
         // -----------------------------------------------------------------
         // 1. SABİTLER, DEPOLAMA ANAHTARLARI VE DURUM DEĞİŞKENLERİ
         // -----------------------------------------------------------------
-        const DEVICE_IDENTITY_KEY = 'mac_iptv_player_identity_v1';
+        const XTREAM_STORAGE_KEY = 'xtream_iptv_player_login_v1';
         const PLAYER_FAVORITES_KEY = 'mac_iptv_player_favorites_v1';
         const PLAYER_URL_CACHE_KEY = 'mac_iptv_player_url_cache_v1';
 
@@ -722,6 +678,8 @@
         const DEVICE_RECORD_PREFIX = 'mac_iptv_device_';
         const LAST_PUSH_HEARTBEAT_KEY = 'mac_iptv_last_push_v1';
         const LEGACY_PORTAL_STORAGE_KEY = 'mac_iptv_portal_assignments_v2';
+        // Panel ile AYNI Render servis adresi yazılmalı.
+        const IPTV_API_BASE = 'https://YOUR-RENDER-SERVICE.onrender.com';
 
         const SYNC_BROADCAST_CHANNEL_NAME = 'mac_iptv_sync_channel';
         const LEGACY_BROADCAST_CHANNEL_NAME = 'mac_iptv_portal_channel_v1';
@@ -731,7 +689,9 @@
         const STREAM_OPEN_TIMEOUT_MS = 1500;
         const MAX_VISIBLE_CHANNEL_ITEMS = 120;
 
-        let deviceIdentity = { mac: '', deviceKey: '' };
+        let xtreamAccount = null;
+        let xtreamCategoryNames = { live: new Map(), movies: new Map(), series: new Map() };
+        let deviceIdentity = { mac: 'Xtream', deviceKey: '' };
         let activeAssignment = null;
         let channels = [];
         let activeContentSection = 'live';
@@ -781,171 +741,181 @@
         // -----------------------------------------------------------------
         // 2. CİHAZ KİMLİĞİ, PORTAL SENKRONİZASYONU VE M3U AYRIŞTIRMA
         // -----------------------------------------------------------------
-        function normalizeMac(raw) {
-            const hex = (raw || '').replace(/[^a-fA-F0-9]/g, '').toUpperCase().slice(0, 12);
-            const pairs = hex.match(/.{1,2}/g);
-            return pairs ? pairs.join(':') : '';
-        }
-
-        function generateRandomMac() {
-            const bytes = ['00', '1A', '79'];
-            for (let i = 0; i < 3; i++) {
-                const val = Math.floor(Math.random() * 256).toString(16).toUpperCase().padStart(2, '0');
-                bytes.push(val);
-            }
-            return bytes.join(':');
-        }
-
-        function generateRandomDeviceKey() {
-            return String(Math.floor(100000 + Math.random() * 900000));
-        }
-
-        function regenerateDeviceMac() {
-            deviceIdentity = {
-                mac: generateRandomMac(),
-                deviceKey: generateRandomDeviceKey()
-            };
-            saveDeviceIdentity();
-            updateIdentityUI();
-            refreshFromPortal(false);
-            showToast(`Yeni MAC üretildi: ${deviceIdentity.mac}`, 'info');
-        }
-
-        function toggleCustomMacEditor() {
-            const editor = document.getElementById('custom-mac-editor');
-            const input = document.getElementById('custom-mac-input');
-            if (!editor) return;
-            editor.classList.toggle('hidden');
-            if (!editor.classList.contains('hidden') && input) {
-                input.value = deviceIdentity.mac;
-                input.focus();
-            }
-        }
-
-        function applyCustomMacAddress() {
-            const input = document.getElementById('custom-mac-input');
-            const normalized = normalizeMac(input ? input.value : '');
-            if (!/^([0-9A-F]{2}:){5}[0-9A-F]{2}$/.test(normalized)) {
-                showToast('Geçerli bir MAC adresi girin (Örn: 00:1A:79:12:34:56).', 'error');
-                return;
-            }
-            deviceIdentity = {
-                mac: normalized,
-                deviceKey: deviceIdentity.deviceKey || generateRandomDeviceKey()
-            };
-            saveDeviceIdentity();
-            updateIdentityUI();
-            const editor = document.getElementById('custom-mac-editor');
-            if (editor) editor.classList.add('hidden');
-            refreshFromPortal(false);
-            showToast(`MAC güncellendi: ${normalized}`, 'success');
-        }
-
-        function loadOrCreateDeviceIdentity() {
+        function loadSavedXtream() {
             try {
-                const raw = localStorage.getItem(DEVICE_IDENTITY_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (parsed && normalizeMac(parsed.mac).length === 17 && parsed.deviceKey) {
-                        deviceIdentity = {
-                            mac: normalizeMac(parsed.mac),
-                            deviceKey: String(parsed.deviceKey)
-                        };
-                        updateIdentityUI();
-                        return;
-                    }
+                const saved = JSON.parse(localStorage.getItem(XTREAM_STORAGE_KEY) || 'null');
+                if (saved) {
+                    document.getElementById('xtream-server').value = saved.server || '';
+                    document.getElementById('xtream-username').value = saved.username || '';
+                    document.getElementById('xtream-password').value = saved.password || '';
+                    document.getElementById('xtream-remember').checked = true;
                 }
             } catch (_) {}
-
-            deviceIdentity = {
-                mac: generateRandomMac(),
-                deviceKey: generateRandomDeviceKey()
-            };
-            saveDeviceIdentity();
-            updateIdentityUI();
         }
 
-        function saveDeviceIdentity() {
-            try {
-                localStorage.setItem(DEVICE_IDENTITY_KEY, JSON.stringify(deviceIdentity));
-            } catch (_) {}
+        function normalizeXtreamServer(value) {
+            return String(value || '').trim().replace(/\/+$/, '');
         }
 
-        function updateIdentityUI() {
-            document.getElementById('display-mac-address').innerText = deviceIdentity.mac;
-            document.getElementById('player-active-mac').innerText = deviceIdentity.mac;
-            const hubMac = document.getElementById('hub-mac-label');
-            if (hubMac) hubMac.innerText = deviceIdentity.mac;
-            if (typeof window.__subscribeCloudMac === 'function' && deviceIdentity.mac) {
-                window.__subscribeCloudMac(deviceIdentity.mac);
+        async function xtreamRequest(action) {
+            const url = `${xtreamAccount.server}/player_api.php?username=${encodeURIComponent(xtreamAccount.username)}&password=${encodeURIComponent(xtreamAccount.password)}${action ? `&action=${encodeURIComponent(action)}` : ''}`;
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) throw new Error(`Sunucu HTTP ${response.status} yanıtı verdi.`);
+            return response.json();
+        }
+
+        async function loadXtreamCategoryNames() {
+            const actions = [
+                ['live', 'get_live_categories'],
+                ['movies', 'get_vod_categories'],
+                ['series', 'get_series_categories']
+            ];
+            const results = await Promise.all(actions.map(async ([section, action]) => {
+                try {
+                    const rows = await xtreamRequest(action);
+                    const map = new Map();
+                    (Array.isArray(rows) ? rows : []).forEach(row => {
+                        if (row.category_id != null && row.category_name) map.set(String(row.category_id), String(row.category_name));
+                    });
+                    return [section, map];
+                } catch (_) { return [section, new Map()]; }
+            }));
+            results.forEach(([section, map]) => { xtreamCategoryNames[section] = map; });
+        }
+
+        function getXtreamCategoryName(item, section) {
+            const id = item.category_id == null ? '' : String(item.category_id);
+            return item.category_name || xtreamCategoryNames[section]?.get(id) ||
+                (section === 'live' ? 'Diğer Canlı Kanallar' : section === 'movies' ? 'Diğer Filmler' : 'Diğer Diziler');
+        }
+
+        async function loginXtream() {
+            const server = normalizeXtreamServer(document.getElementById('xtream-server').value);
+            const username = document.getElementById('xtream-username').value.trim();
+            const password = document.getElementById('xtream-password').value;
+            const remember = document.getElementById('xtream-remember').checked;
+            const status = document.getElementById('xtream-login-status');
+            const button = document.getElementById('xtream-login-button');
+            if (!/^https?:\/\//i.test(server) || !username || !password) {
+                status.textContent = 'Sunucu URL, kullanıcı adı ve şifre alanlarını kontrol edin.';
+                status.className = 'text-xs text-red-400'; return;
             }
+            xtreamAccount = { server, username, password };
+            button.disabled = true; button.textContent = 'BAĞLANIYOR...';
+            status.textContent = 'Hesap doğrulanıyor ve içerikler alınıyor...';
+            status.className = 'text-xs text-[#00D2FF]';
+            try {
+                const auth = await xtreamRequest('');
+                if (!auth || !auth.user_info || String(auth.user_info.auth) !== '1') throw new Error('Giriş bilgileri hatalı veya abonelik pasif.');
+                if (remember) localStorage.setItem(XTREAM_STORAGE_KEY, JSON.stringify(xtreamAccount));
+                else localStorage.removeItem(XTREAM_STORAGE_KEY);
+                await loadXtreamCategoryNames();
+                const [live, movies, series] = await Promise.all([
+                    xtreamRequest('get_live_streams'), xtreamRequest('get_vod_streams'), xtreamRequest('get_series')
+                ]);
+                const toChannels = (items, section, ext) => (Array.isArray(items) ? items : []).map((item, i) => {
+                    const id = item.stream_id || item.series_id || item.id || i + 1;
+                    const name = item.name || item.title || `İçerik ${i + 1}`;
+                    const category = getXtreamCategoryName(item, section);
+                    let url = '';
+                    if (section === 'live') url = `${server}/live/${encodeURIComponent(username)}/${encodeURIComponent(password)}/${id}.${item.container_extension || 'ts'}`;
+                    else if (section === 'movies') url = `${server}/movie/${encodeURIComponent(username)}/${encodeURIComponent(password)}/${id}.${item.container_extension || 'mp4'}`;
+                    else url = '';
+                    return { id: `${section}-${id}`, name, url, group: String(category), category: String(category), logo: item.stream_icon || item.cover || '', section, code: 'XT' , seriesId: section === 'series' ? id : null };
+                });
+                channels = [...toChannels(live, 'live'), ...toChannels(movies, 'movies'), ...toChannels(series, 'series')];
+                if (!channels.length) throw new Error('Hesap doğrulandı ancak listelerde içerik bulunamadı.');
+                activeAssignment = { name: auth.user_info.username || username };
+                document.getElementById('player-active-mac').textContent = username;
+                document.getElementById('hub-mac-label').textContent = username;
+                const title = `Xtream: ${username}`;
+                document.getElementById('hub-current-list-name').textContent = title;
+                document.getElementById('player-playlist-name').textContent = title;
+                updateSectionCounts(); renderCategoryTabs(); renderChannelList();
+                showHubScreen();
+                status.textContent = 'Bağlantı başarılı.';
+                showToast(`Bağlandı: ${channels.length} içerik yüklendi.`, 'success');
+            } catch (err) {
+                status.textContent = err.message || 'Bağlantı kurulamadı. Sunucu CORS erişimini kontrol edin.';
+                status.className = 'text-xs text-red-400';
+                showToast('Xtream bağlantısı başarısız: ' + (err.message || 'Ağ hatası'), 'error');
+            } finally { button.disabled = false; button.textContent = 'GİRİŞ YAP'; }
         }
 
-        function findAssignmentForMac(mac) {
-            const targetMac = normalizeMac(mac);
-            if (!targetMac) return null;
-
+        async function refreshFromPortal(showFeedback = false) {
+            if (!xtreamAccount) return;
             try {
-                const rawDevice = localStorage.getItem(`${DEVICE_RECORD_PREFIX}${targetMac}`);
-                if (rawDevice) {
-                    const parsedDev = JSON.parse(rawDevice);
-                    if (parsedDev && parsedDev.playlist) {
-                        return { ...parsedDev.playlist, mac: targetMac };
-                    }
-                }
-            } catch (_) {}
+                await loadXtreamCategoryNames();
+                const [live, movies, series] = await Promise.all([
+                    xtreamRequest('get_live_streams'), xtreamRequest('get_vod_streams'), xtreamRequest('get_series')
+                ]);
+                const make = (items, section) => (Array.isArray(items) ? items : []).map((item, i) => {
+                    const id = item.stream_id || item.series_id || item.id || i + 1;
+                    const name = item.name || item.title || `İçerik ${i + 1}`;
+                    const group = getXtreamCategoryName(item, section);
+                    const path = section === 'live' ? 'live' : 'movie';
+                    const ext = item.container_extension || (section === 'live' ? 'ts' : 'mp4');
+                    const url = section === 'series' ? '' : `${xtreamAccount.server}/${path}/${encodeURIComponent(xtreamAccount.username)}/${encodeURIComponent(xtreamAccount.password)}/${id}.${ext}`;
+                    return { id: `${section}-${id}`, name, url, group, category: group, logo: item.stream_icon || item.cover || '', section, code: 'XT', seriesId: section === 'series' ? id : null };
+                });
+                channels = [...make(live,'live'), ...make(movies,'movies'), ...make(series,'series')];
+                updateSectionCounts(); renderCategoryTabs(); renderChannelList();
+                if (showFeedback) showToast(`Liste yenilendi (${channels.length} içerik).`, 'success');
+            } catch (err) { if (showFeedback) showToast('Liste yenilenemedi: ' + err.message, 'error'); }
+        }
 
-            try {
-                const rawShared = localStorage.getItem(SHARED_REGISTRY_KEY) || localStorage.getItem(LEGACY_PORTAL_STORAGE_KEY);
-                if (rawShared) {
-                    const parsed = JSON.parse(rawShared);
-                    const list = Array.isArray(parsed) ? parsed : (parsed && Array.isArray(parsed.entries) ? parsed.entries : []);
-                    const match = list.find(item => item && normalizeMac(item.mac) === targetMac);
-                    if (match) return { ...match, mac: targetMac };
-                }
-            } catch (_) {}
-
-            return null;
+        async function openHubWithAssignedPlaylist() {
+            if (!channels.length) { showToast('Önce Xtream Codes ile giriş yapın.', 'info'); return; }
+            showHubScreen();
         }
 
         function isPlaylistSourceUrl(url) {
-            const u = String(url || '').toLowerCase();
-            return /get\.php\?|type=m3u|\.m3u($|[?#])/i.test(u) && !/\.m3u8($|[?#])/i.test(u);
+            if (!url || typeof url !== 'string') return false;
+            const lower = url.trim().toLowerCase();
+            if (/\/get\.php\b|\/playlist\.php\b|\/xmltv\.php\b/i.test(lower)) return true;
+            if (/[?&](type=m3u|type=m3u_plus|output=m3u8|output=ts|format=m3u8)\b/i.test(lower)) return true;
+            if (/\.(m3u|m3u8)($|[?#])/i.test(lower)) return true;
+            return false;
         }
 
-        function classifyChannelSection(name, group, url) {
-            const text = `${name || ''} ${group || ''} ${url || ''}`.toLowerCase();
-            if (/radyo|radio|fm\b|trtfms|power\s*fm|kral\s*fm|best\s*fm|virgin\s*radio|slow\s*türk|joy\s*fm|metro\s*fm|number\s*one/i.test(text)) {
-                return 'radios';
-            }
-            if (/dizi|series|sezon|s\d{1,2}e\d{1,2}|bölüm|bolum|episode|netflix|blutv|exxen|gain|disney\+|amazon\s*prime/i.test(text)) {
-                return 'series';
-            }
-            if (/film|movie|vod|sinema|cinema|box\s*office|yerli\s*film|yabancı\s*film|aksiyon|komedi|korku|dram|animasyon|4k\s*film|\.mp4($|[?#])|\.mkv($|[?#])|\.avi($|[?#])/i.test(text)) {
-                return 'movies';
-            }
-            return 'live';
-        }
-
-        function normalizeCategoryLabel(rawGroup, name, url, section) {
-            const cleaned = String(rawGroup || '').trim();
-            if (cleaned && cleaned.toLowerCase() !== 'genel') {
+        function normalizeCategoryLabel(rawGroup, name = '', url = '', section = 'live') {
+            const cleaned = String(rawGroup || '').replace(/\s+/g, ' ').trim();
+            if (cleaned && cleaned.toLowerCase() !== 'genel' && cleaned.toLowerCase() !== 'canlı liste') {
                 return cleaned;
             }
-            const map = {
-                live: 'Genel Canlı',
-                movies: 'Genel Filmler',
-                series: 'Genel Diziler',
-                radios: 'Genel Radyolar'
-            };
-            return map[section] || 'Genel';
+            const combined = `${cleaned} ${name} ${url}`.toLowerCase();
+            if (section === 'live') {
+                if (/yerel|bölgesel|local|il\b|şehir/i.test(combined)) return 'Yerel Kanallar';
+                if (/ulusal|tr\b|türkiye|turkey|ana kanal/i.test(combined)) return 'Ulusal Kanallar';
+                if (/spor|sport|beinsport|ssport|futbol|basket/i.test(combined)) return 'Spor';
+                if (/haber|news|24\b/i.test(combined)) return 'Haber';
+                if (/belgesel|doc|natgeo|discovery|tarih/i.test(combined)) return 'Belgesel';
+                if (/çocuk|kids|cartoon|animasyon/i.test(combined)) return 'Çocuk';
+                return 'Ulusal Kanallar';
+            }
+            if (section === 'movies') {
+                if (/aksiyon|action/i.test(combined)) return 'Aksiyon';
+                if (/gerilim|thriller|korku|horror/i.test(combined)) return 'Gerilim';
+                if (/komedi|comedy/i.test(combined)) return 'Komedi';
+                if (/dram|drama/i.test(combined)) return 'Dram';
+                if (/bilim kurgu|sci-fi|fantastik|fantasy/i.test(combined)) return 'Bilim Kurgu';
+                return 'Genel Filmler';
+            }
+            if (section === 'series') {
+                if (/aksiyon|action|suç|crime/i.test(combined)) return 'Aksiyon & Suç';
+                if (/dram|drama|romantik/i.test(combined)) return 'Dram';
+                if (/komedi|comedy/i.test(combined)) return 'Komedi';
+                if (/bilim kurgu|sci-fi|fantastik|fantasy/i.test(combined)) return 'Bilim Kurgu & Fantastik';
+                return 'Genel Diziler';
+            }
+            return cleaned || 'Genel Radyolar';
         }
 
-        function parseM3UTextToChannels(content) {
-            const lines = String(content || '').split(/\r?\n/);
+        function parseM3UStringToChannels(m3uText, fallbackGroup = 'Ulusal Kanallar') {
+            const lines = (m3uText || '').split(/\r?\n/);
             const parsed = [];
             let pendingName = '';
-            let pendingGroup = 'Genel';
+            let pendingGroup = fallbackGroup;
             let pendingLogo = '';
 
             for (let i = 0; i < lines.length; i++) {
@@ -953,8 +923,8 @@
                 if (!line) continue;
 
                 if (line.startsWith('#EXTINF:')) {
-                    const groupMatch = line.match(/group-title="([^"]*)"/i);
-                    pendingGroup = (groupMatch && groupMatch[1]) ? groupMatch[1].trim() : 'Genel';
+                    const grpMatch = line.match(/group-title="([^"]*)"/i);
+                    pendingGroup = (grpMatch && grpMatch[1]) ? grpMatch[1].trim() : fallbackGroup;
 
                     const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
                     pendingLogo = (logoMatch && logoMatch[1]) ? logoMatch[1].trim() : '';
@@ -963,105 +933,191 @@
                     pendingName = commaIdx !== -1 ? line.slice(commaIdx + 1).trim() : '';
                 } else if (!line.startsWith('#') && /^(https?:\/\/|rtmp:\/\/|rtsp:\/\/)/i.test(line)) {
                     const idx = parsed.length + 1;
-                    const chName = pendingName || `Kanal ${idx}`;
-                    const section = classifyChannelSection(chName, pendingGroup, line);
-                    const category = normalizeCategoryLabel(pendingGroup, chName, line, section);
+                    const name = pendingName || `Kanal ${idx}`;
+                    const cleanCode = name.replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV';
+                    const section = classifyChannelSection(name, pendingGroup, line);
+                    const normalizedCategory = normalizeCategoryLabel(pendingGroup, name, line, section);
+                    const resolvedArtwork = buildArtworkUrl(pendingLogo, name, normalizedCategory, section, cleanCode);
                     parsed.push({
-                        id: `ch-${idx}-${Math.abs(hashString(line + chName))}`,
-                        name: chName,
+                        id: `ch-${idx}-${name.slice(0, 8).replace(/\W/g, '')}`,
+                        name,
                         url: line,
-                        group: pendingGroup || category,
-                        category,
+                        group: normalizedCategory,
+                        category: normalizedCategory,
+                        logo: resolvedArtwork,
                         section,
-                        logo: pendingLogo,
-                        code: chName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV'
+                        code: cleanCode
                     });
                     pendingName = '';
-                    pendingGroup = 'Genel';
+                    pendingGroup = fallbackGroup;
                     pendingLogo = '';
                 }
             }
             return parsed;
         }
 
-        function hashString(str) {
-            let h = 0;
-            for (let i = 0; i < str.length; i++) {
-                h = ((h << 5) - h) + str.charCodeAt(i);
-                h |= 0;
+        function buildArtworkUrl(rawLogo, name, category, section, code) {
+            const trimmed = String(rawLogo || '').trim();
+            if (/^(https?:\/\/)/i.test(trimmed)) {
+                return trimmed;
             }
-            return h;
+            const label = encodeURIComponent((name || code || 'TV').slice(0, 18));
+            if (section === 'movies') {
+                return `https://placehold.co/120x170/172538/38bdf8?text=${label}`;
+            }
+            if (section === 'series') {
+                return `https://placehold.co/120x170/1d2336/a5b4fc?text=${label}`;
+            }
+            if (section === 'radios') {
+                return `https://placehold.co/120x120/261d14/fbbf24?text=${label}`;
+            }
+            return `https://placehold.co/120x120/15202b/00D2FF?text=${label}`;
+        }
+
+        function renderChannelArtworkHtml(ch, isPosterSection = false) {
+            const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
+            const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec);
+            const fallbackUrl = buildArtworkUrl('', ch.name, cat, sec, ch.code || 'TV');
+            const srcUrl = ch.logo || fallbackUrl;
+            const sizeCls = isPosterSection ? 'w-11 h-16 rounded-lg' : 'w-11 h-11 rounded-xl';
+
+            return `
+                <img
+                    src="${escapeHtml(srcUrl)}"
+                    alt="${escapeHtml(ch.name)}"
+                    loading="lazy"
+                    onerror="if (this.dataset.fbApplied !== '1') { this.dataset.fbApplied = '1'; this.src = '${escapeHtml(fallbackUrl)}'; }"
+                    class="${sizeCls} object-cover bg-[#171717] border border-[#262626] shrink-0"
+                >
+            `;
+        }
+
+        function classifyChannelSection(name, group, url) {
+            const text = `${name || ''} ${group || ''} ${url || ''}`.toLowerCase();
+            if (/\/radio\b|radio|radyo|fm\b|am\b|podcast|\.(mp3|aac|ogg)($|[?#])/i.test(text)) {
+                return 'radios';
+            }
+            if (/\/series\b|series|dizi|sezon|s0\d|e0\d|episode|bölüm/i.test(text)) {
+                return 'series';
+            }
+            if (/\/movie\b|\/movies\b|\/vod\b|film|sinema|cinema|boxset|4k vod|\.(mkv|mp4|avi)($|[?#])/i.test(text)) {
+                return 'movies';
+            }
+            return 'live';
+        }
+
+        async function fetchPlaylistTextWithFallbacks(url) {
+            const attempts = [
+                url,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+                `https://corsproxy.io/?${encodeURIComponent(url)}`
+            ];
+
+            for (let i = 0; i < attempts.length; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timer = setTimeout(() => controller.abort(), 5000);
+                    const resp = await fetch(attempts[i], { signal: controller.signal });
+                    clearTimeout(timer);
+                    if (!resp.ok) continue;
+                    const text = await resp.text();
+                    if (text && (text.includes('#EXTINF') || text.includes('#EXTM3U') || text.includes('http'))) {
+                        return text;
+                    }
+                } catch (_) {}
+            }
+            throw new Error('Liste içeriği çekilemedi (CORS veya sunucu erişim kısıtı).');
         }
 
         async function hydrateChannelsFromAssignment(assignment) {
             if (!assignment) return [];
 
-            if (assignment.fileContent && typeof assignment.fileContent === 'string' && assignment.fileContent.includes('#EXTINF')) {
-                const fromContent = parseM3UTextToChannels(assignment.fileContent);
-                if (fromContent.length > 0) return fromContent;
-            }
-
             if (Array.isArray(assignment.channels) && assignment.channels.length > 0) {
-                const isSinglePlaceholder = assignment.channels.length === 1 && isPlaylistSourceUrl(assignment.channels[0].url);
-                if (!isSinglePlaceholder) {
+                const hasRealStreamChannels = assignment.channels.some(ch => ch && ch.url && !isPlaylistSourceUrl(ch.url));
+                if (hasRealStreamChannels) {
                     return assignment.channels.map((ch, idx) => {
-                        const sec = ch.section || classifyChannelSection(ch.name, ch.group || ch.category, ch.url);
-                        const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec);
+                        const chName = ch.name || `Kanal ${idx + 1}`;
+                        const sec = ch.section || classifyChannelSection(chName, ch.group || ch.category, ch.url);
+                        const chGroup = normalizeCategoryLabel(ch.group || ch.category || '', chName, ch.url, sec);
+                        const chCode = ch.code || chName.replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV';
                         return {
-                            ...ch,
                             id: ch.id || `ch-${idx + 1}`,
+                            name: chName,
+                            url: ch.url,
+                            group: chGroup,
+                            category: chGroup,
+                            logo: buildArtworkUrl(ch.logo, chName, chGroup, sec, chCode),
                             section: sec,
-                            category: cat,
-                            group: ch.group || cat,
-                            code: ch.code || (ch.name || 'TV').replace(/[^a-zA-Z0-9]/g, '').slice(0, 5).toUpperCase() || 'TV'
+                            code: chCode
                         };
                     });
                 }
             }
 
-            const fetchUrl = (assignment.url || '').trim();
-            if (fetchUrl && /^https?:\/\//i.test(fetchUrl) && isPlaylistSourceUrl(fetchUrl)) {
+            if (assignment.fileContent) {
+                const fromFile = parseM3UStringToChannels(assignment.fileContent, assignment.name || 'Ulusal Kanallar');
+                if (fromFile.length > 0) return fromFile;
+            }
+
+            const candidateUrl = assignment.url || '';
+            if (candidateUrl && isPlaylistSourceUrl(candidateUrl)) {
                 try {
-                    const controller = new AbortController();
-                    const timer = setTimeout(() => controller.abort(), 5000);
-                    const res = await fetch(fetchUrl, { signal: controller.signal });
-                    clearTimeout(timer);
-                    if (res.ok) {
-                        const text = await res.text();
-                        const parsedRemote = parseM3UTextToChannels(text);
-                        if (parsedRemote.length > 0) return parsedRemote;
+                    const rawM3U = await fetchPlaylistTextWithFallbacks(candidateUrl);
+                    const parsed = parseM3UStringToChannels(rawM3U, assignment.name || 'Ulusal Kanallar');
+                    if (parsed.length > 0) {
+                        return parsed;
                     }
                 } catch (_) {}
             }
 
-            if (Array.isArray(assignment.channels) && assignment.channels.length > 0) {
-                return assignment.channels.map((ch, idx) => {
-                    const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
-                    return {
-                        ...ch,
-                        id: ch.id || `ch-${idx + 1}`,
-                        section: sec,
-                        category: normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec),
-                        group: ch.group || 'Genel'
-                    };
-                });
+            if (candidateUrl) {
+                const sec = classifyChannelSection(assignment.name || '', 'Ulusal Kanallar', candidateUrl);
+                const cat = normalizeCategoryLabel('', assignment.name || '', candidateUrl, sec);
+                return [{
+                    id: 'single-src-1',
+                    name: assignment.name || 'Canlı Yayın',
+                    url: candidateUrl,
+                    group: cat,
+                    category: cat,
+                    section: sec,
+                    code: 'M3U'
+                }];
             }
 
             return [];
         }
 
         function updateSectionCounts() {
-            const counts = { live: 0, movies: 0, series: 0, radios: 0 };
+            let liveCount = 0;
+            let moviesCount = 0;
+            let seriesCount = 0;
+            let radiosCount = 0;
+
             channels.forEach(ch => {
                 const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
-                if (counts[sec] !== undefined) counts[sec] += 1;
+                if (sec === 'movies') moviesCount += 1;
+                else if (sec === 'series') seriesCount += 1;
+                else if (sec === 'radios') radiosCount += 1;
+                else liveCount += 1;
             });
 
-            ['live', 'movies', 'series', 'radios'].forEach(key => {
-                const hubEl = document.getElementById(`hub-count-${key}`);
-                const secEl = document.getElementById(`section-count-${key}`);
-                if (hubEl) hubEl.innerText = String(counts[key]);
-                if (secEl) secEl.innerText = String(counts[key]);
+            const setPair = (secId, hubId, val) => {
+                const el1 = document.getElementById(secId);
+                const el2 = document.getElementById(hubId);
+                if (el1) el1.innerText = String(val);
+                if (el2) el2.innerText = String(val);
+            };
+
+            setPair('section-count-live', 'hub-count-live', liveCount);
+            setPair('section-count-movies', 'hub-count-movies', moviesCount);
+            setPair('section-count-series', 'hub-count-series', seriesCount);
+            setPair('section-count-radios', 'hub-count-radios', radiosCount);
+        }
+
+        function getSectionChannels(sectionKey = activeContentSection) {
+            return channels.filter(ch => {
+                const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
+                return sec === sectionKey;
             });
         }
 
@@ -1070,60 +1126,64 @@
             const summaryEl = document.getElementById('active-category-summary');
             if (!container) return;
 
-            const sectionChannels = channels.filter(ch => (ch.section || classifyChannelSection(ch.name, ch.group, ch.url)) === activeContentSection);
-            const catMap = new Map();
-            sectionChannels.forEach(ch => {
-                const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, activeContentSection);
-                catMap.set(cat, (catMap.get(cat) || 0) + 1);
+            const sectionItems = getSectionChannels(activeContentSection);
+            const catCounts = new Map();
+
+            sectionItems.forEach(ch => {
+                const sec = ch.section || classifyChannelSection(ch.name, ch.group, ch.url);
+                const cat = normalizeCategoryLabel(ch.category || ch.group, ch.name, ch.url, sec);
+                catCounts.set(cat, (catCounts.get(cat) || 0) + 1);
             });
 
-            if (summaryEl) {
-                summaryEl.innerText = activeCategoryFilter === 'ALL' ? `Tümü (${sectionChannels.length})` : activeCategoryFilter;
+            if (activeCategoryFilter !== 'ALL' && !catCounts.has(activeCategoryFilter)) {
+                activeCategoryFilter = 'ALL';
             }
 
-            const items = [['ALL', sectionChannels.length], ...Array.from(catMap.entries())];
-            container.innerHTML = items.map(([catKey, count]) => {
-                const isSelected = activeCategoryFilter === catKey;
-                const label = catKey === 'ALL' ? 'Tümü' : catKey;
+            if (summaryEl) {
+                summaryEl.innerText = activeCategoryFilter === 'ALL'
+                    ? `Tüm Kategoriler (${sectionItems.length})`
+                    : `${activeCategoryFilter} (${catCounts.get(activeCategoryFilter) || 0})`;
+            }
+
+            const tabs = [
+                { key: 'ALL', label: 'Tümü', count: sectionItems.length },
+                ...Array.from(catCounts.entries()).map(([cat, count]) => ({
+                    key: cat,
+                    label: cat,
+                    count
+                }))
+            ];
+
+            container.innerHTML = tabs.map(tab => {
+                const isActive = activeCategoryFilter === tab.key;
                 return `
                     <button
                         type="button"
-                        onclick="selectCategoryFilter('${escapeHtml(catKey)}')"
-                        class="tv-focus w-full px-2.5 py-2 rounded-xl text-left text-xs flex items-center justify-between gap-2 transition ${
-                            isSelected
-                                ? 'bg-[#00D2FF] text-[#101010] font-extrabold'
-                                : 'bg-[#101010] hover:bg-[#222222] text-[#D4D4D4] border border-[#262626]'
+                        onclick="setCategoryFilter('${escapeHtml(tab.key)}')"
+                        class="tv-focus w-full px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-between gap-2 text-left ${
+                            isActive
+                                ? 'bg-[#10B981] text-[#101010] font-extrabold'
+                                : 'bg-[#101010] hover:bg-[#222222] text-[#D4D4D4] hover:text-white border border-[#262626]'
                         }"
                     >
-                        <span class="truncate">${escapeHtml(label)}</span>
-                        <span class="font-mono text-[10px] px-1.5 py-0.5 rounded ${isSelected ? 'bg-black/20 text-[#101010]' : 'bg-[#171717] text-[#9E9E9E]'}">${count}</span>
+                        <span class="truncate">${escapeHtml(tab.label)}</span>
+                        <span class="font-mono text-[10px] px-1.5 py-0.5 rounded shrink-0 ${
+                            isActive ? 'bg-black/20 text-[#101010]' : 'bg-[#171717] text-[#9E9E9E]'
+                        }">${tab.count}</span>
                     </button>
                 `;
             }).join('');
         }
 
-        function selectCategoryFilter(catKey) {
-            activeCategoryFilter = catKey;
+        function setCategoryFilter(categoryKey) {
+            activeCategoryFilter = categoryKey || 'ALL';
             renderCategoryTabs();
             renderChannelList();
-        }
 
-        function renderChannelArtworkHtml(channel, isPoster = false) {
-            const code = escapeHtml((channel && channel.code) || 'TV');
-            const sizeCls = isPoster ? 'w-9 h-12 rounded-lg' : 'w-9 h-9 rounded-lg';
-            if (channel && channel.logo && /^https?:\/\//i.test(channel.logo)) {
-                return `
-                    <div class="${sizeCls} bg-[#171717] border border-[#262626] flex items-center justify-center overflow-hidden shrink-0">
-                        <img src="${escapeHtml(channel.logo)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" class="w-full h-full object-contain">
-                        <span style="display:none" class="w-full h-full items-center justify-center font-mono text-[10px] font-bold text-[#00D2FF]">${code}</span>
-                    </div>
-                `;
+            const visible = getVisibleChannels();
+            if (visible.length > 0 && (!currentChannel || !visible.some(c => c.id === currentChannel.id))) {
+                playChannel(visible[0]);
             }
-            return `
-                <div class="${sizeCls} bg-[#171717] border border-[#262626] flex items-center justify-center font-mono text-[10px] font-bold text-[#00D2FF] shrink-0">
-                    ${code}
-                </div>
-            `;
         }
 
         function setContentSection(sectionKey, autoPlayFirst = true) {
@@ -1147,132 +1207,6 @@
                 const list = getVisibleChannels();
                 if (list.length > 0 && (!currentChannel || !list.some(c => c.id === currentChannel.id))) {
                     playChannel(list[0]);
-                }
-            }
-        }
-
-        async function refreshFromPortal(showFeedback = false) {
-            let found = findAssignmentForMac(deviceIdentity.mac);
-            if (!found && typeof window.__fetchCloudMacOnce === 'function') {
-                found = await window.__fetchCloudMacOnce(deviceIdentity.mac);
-                if (found) {
-                    try {
-                        localStorage.setItem(`${DEVICE_RECORD_PREFIX}${normalizeMac(deviceIdentity.mac)}`, JSON.stringify({
-                            mac: normalizeMac(deviceIdentity.mac),
-                            deviceKey: found.deviceKey || '',
-                            playlist: found,
-                            updatedAt: Date.now()
-                        }));
-                    } catch (_) {}
-                }
-            }
-            const titleEl = document.getElementById('mac-loaded-playlist-title');
-            const actionEl = document.getElementById('mac-loaded-playlist-action');
-            const hubListEl = document.getElementById('hub-current-list-name');
-
-            if (!found) {
-                activeAssignment = null;
-                if (titleEl) {
-                    titleEl.innerText = 'Henüz liste yüklenmedi';
-                    titleEl.className = 'text-sm sm:text-base font-bold text-[#9E9E9E] truncate mt-0.5';
-                }
-                if (actionEl) {
-                    actionEl.innerText = 'BEKLENİYOR';
-                    actionEl.className = 'shrink-0 text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-[#1E1E1E] text-[#9E9E9E]';
-                }
-                if (hubListEl) hubListEl.innerText = 'Henüz liste yüklenmedi';
-                if (showFeedback) showToast(`${deviceIdentity.mac} için yeni liste bulunamadı.`, 'info');
-                return;
-            }
-
-            activeAssignment = found;
-            const playlistTitle = found.name || 'Müşteri Çalma Listesi';
-            if (titleEl) {
-                titleEl.innerText = playlistTitle;
-                titleEl.className = 'text-sm sm:text-base font-bold text-[#10B981] truncate mt-0.5';
-            }
-            if (actionEl) {
-                actionEl.innerText = 'AÇ';
-                actionEl.className = 'shrink-0 text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-[#10B981]/15 text-[#10B981]';
-            }
-            if (hubListEl) hubListEl.innerText = playlistTitle;
-
-            const loadedChs = await hydrateChannelsFromAssignment(found);
-            if (loadedChs.length > 0) {
-                channels = loadedChs;
-                updateSectionCounts();
-                renderCategoryTabs();
-                document.getElementById('player-playlist-name').innerText = playlistTitle;
-                renderChannelList();
-
-                const inPlayer = !document.getElementById('screen-player').classList.contains('hidden');
-                if (inPlayer) {
-                    const visible = getVisibleChannels();
-                    const firstCh = currentChannel && visible.some(c => c.id === currentChannel.id)
-                        ? currentChannel
-                        : (visible[0] || channels[0]);
-                    if (firstCh) playChannel(firstCh);
-                }
-            } else if (showFeedback) {
-                showToast(`"${playlistTitle}" bulundu ancak içinde oynatılabilir kanal yok.`, 'info');
-                return;
-            }
-
-            if (showFeedback) {
-                showToast(`"${playlistTitle}" güncellendi (${channels.length} içerik).`, 'success');
-            }
-        }
-
-        async function openHubWithAssignedPlaylist() {
-            const btnEl = document.getElementById('btn-open-assigned-player');
-            const titleEl = document.getElementById('mac-loaded-playlist-title');
-            const actionEl = document.getElementById('mac-loaded-playlist-action');
-            const prevTitle = titleEl ? titleEl.innerText : '';
-            const prevAction = actionEl ? actionEl.innerText : '';
-
-            if (btnEl) btnEl.disabled = true;
-            if (titleEl) {
-                titleEl.innerText = 'Yükleniyor...';
-                titleEl.className = 'text-sm sm:text-base font-bold text-[#00D2FF] truncate mt-0.5';
-            }
-            if (actionEl) {
-                actionEl.innerText = 'YÜKLENİYOR...';
-                actionEl.className = 'shrink-0 text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-[#00D2FF]/15 text-[#00D2FF] animate-pulse';
-            }
-
-            try {
-                if (!activeAssignment) {
-                    await refreshFromPortal(false);
-                }
-                if (!activeAssignment) {
-                    showToast(`${deviceIdentity.mac} MAC adresine henüz liste yüklenmemiş.`, 'info');
-                    return;
-                }
-                const loadedChs = await hydrateChannelsFromAssignment(activeAssignment);
-                if (!loadedChs.length) {
-                    showToast('Yüklü listede oynatılabilir içerik bulunamadı.', 'error');
-                    return;
-                }
-                channels = loadedChs;
-                updateSectionCounts();
-                renderCategoryTabs();
-                const playlistTitle = activeAssignment.name || 'Müşteri Çalma Listesi';
-                document.getElementById('hub-current-list-name').innerText = playlistTitle;
-                document.getElementById('player-playlist-name').innerText = playlistTitle;
-                showHubScreen();
-            } finally {
-                if (btnEl) btnEl.disabled = false;
-                if (titleEl && document.getElementById('screen-hub').classList.contains('hidden')) {
-                    titleEl.innerText = prevTitle || 'Henüz liste yüklenmedi';
-                    titleEl.className = activeAssignment
-                        ? 'text-sm sm:text-base font-bold text-[#10B981] truncate mt-0.5'
-                        : 'text-sm sm:text-base font-bold text-[#9E9E9E] truncate mt-0.5';
-                }
-                if (actionEl && document.getElementById('screen-hub').classList.contains('hidden')) {
-                    actionEl.innerText = prevAction || 'AÇ';
-                    actionEl.className = activeAssignment
-                        ? 'shrink-0 text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-[#10B981]/15 text-[#10B981]'
-                        : 'shrink-0 text-xs font-mono font-bold px-3 py-1.5 rounded-xl bg-[#1E1E1E] text-[#9E9E9E]';
                 }
             }
         }
@@ -1550,7 +1484,7 @@
             }
         }
 
-        function playChannel(channel, overrideUrl = null) {
+        async function playChannel(channel, overrideUrl = null) {
             if (!channel) return;
 
             playSessionId += 1;
@@ -1578,7 +1512,24 @@
             const sessionSignal = activeStreamAbortController.signal;
 
             currentChannel = channel;
-            const baseUrl = (overrideUrl || channel.url || '').trim();
+            let baseUrl = (overrideUrl || channel.url || '').trim();
+            if (!baseUrl && channel.section === 'series' && channel.seriesId && xtreamAccount) {
+                try {
+                    const infoUrl = `${xtreamAccount.server}/player_api.php?username=${encodeURIComponent(xtreamAccount.username)}&password=${encodeURIComponent(xtreamAccount.password)}&action=get_series_info&series_id=${encodeURIComponent(channel.seriesId)}`;
+                    const infoResponse = await fetch(infoUrl, { cache: 'no-store' });
+                    if (!infoResponse.ok) throw new Error('Dizi bölümleri alınamadı.');
+                    const info = await infoResponse.json();
+                    const seasons = info.episodes || {};
+                    const firstEpisode = Object.values(seasons).flat().find(ep => ep && ep.id);
+                    if (!firstEpisode) throw new Error('Bu dizide oynatılabilir bölüm bulunamadı.');
+                    const ext = firstEpisode.container_extension || 'mp4';
+                    baseUrl = `${xtreamAccount.server}/series/${encodeURIComponent(xtreamAccount.username)}/${encodeURIComponent(xtreamAccount.password)}/${firstEpisode.id}.${ext}`;
+                    channel.name = `${channel.name} - İlk Bölüm`;
+                } catch (err) {
+                    showToast(err.message || 'Dizi bölümü yüklenemedi.', 'error');
+                    return;
+                }
+            }
             lastActiveStreamUrl = baseUrl;
 
             const visibleList = getVisibleChannels();
@@ -1610,7 +1561,7 @@
 
             if (!baseUrl) {
                 loader.classList.add('hidden');
-                showPlaybackError('', '', 'EMPTY_URL', 'Bu kanal için geçerli bir akış bağlantısı bulunmuyor.', sessionId);
+                showPlaybackError('', 'EMPTY_URL', 'Bu kanal için geçerli bir akış bağlantısı bulunmuyor.', sessionId);
                 return;
             }
 
@@ -1618,7 +1569,6 @@
                 loader.classList.add('hidden');
                 showPlaybackError(
                     baseUrl,
-                    baseKind,
                     'PLAYLIST_NOT_STREAM',
                     'Bu bağlantı doğrudan video akışı değil bir M3U/Xtream liste bağlantısıdır. Lütfen portal üzerinden yayın akışı içeren listeyi tanımlayın.',
                     sessionId
@@ -1638,34 +1588,38 @@
                 }
 
                 if (candidateIdx >= candidates.length) {
-                    const isTsStream = baseKind.includes('TS Akışı') || /\.ts($|[?#])/i.test(baseUrl);
-                    const isMixedContent = window.location.protocol === 'https:' && /^http:\/\//i.test(baseUrl);
-                    let summaryReason = 'HLS (.m3u8) ve doğrudan medya denemeleri başarısız oldu (CORS, sunucu erişimi veya kodek kısıtı).';
+                const isTsStream = baseKind.includes('TS Akışı') || /\.ts($|[?#])/i.test(baseUrl);
+                const isMixedContent = window.location.protocol === 'https:' && /^http:\/\//i.test(baseUrl);
+                let summaryReason = 'HLS (.m3u8) ve doğrudan medya denemeleri başarısız oldu (CORS, sunucu erişimi veya kodek kısıtı).';
 
-                    if (isTsStream) {
-                        summaryReason = 'Tarayıcılar ham MPEG-TS (.ts) akışlarını doğrudan çözemez; .m3u8 HLS denemesi de yanıt vermedi. "Akış URL\'sini .m3u8 Olarak Dene" veya "Yeni Sekmede Aç" ile test edebilirsiniz.';
-                    } else if (isMixedContent) {
-                        summaryReason = 'HTTPS üzerinden açılan sayfada HTTP yayın akışı Mixed Content veya CORS nedeniyle engellenmiş olabilir.';
-                    }
-
-                    showPlaybackError(
-                        baseUrl,
-                        baseKind,
-                        isTsStream ? 'TS_CODEC_OR_CORS' : 'STREAM_UNAVAILABLE',
-                        summaryReason,
-                        sessionId
-                    );
-                    return;
+                if (isTsStream) {
+                    summaryReason = 'Tarayıcılar ham MPEG-TS (.ts) akışlarını doğrudan çözemez; .m3u8 HLS denemesi de yanıt vermedi. "Akış URL\'sini .m3u8 Olarak Dene" veya "Yeni Sekmede Aç" ile test edebilirsiniz.';
+                } else if (isMixedContent) {
+                    summaryReason = 'HTTPS üzerinden açılan sayfada HTTP yayın akışı Mixed Content veya CORS nedeniyle engellenmiş olabilir.';
                 }
 
-                const cand = candidates[candidateIdx];
-                const candUrl = cand.url;
-                const candKind = detectStreamKind(candUrl);
-                const shouldUseHls = candKind.includes('HLS') || isHlsCandidateUrl(candUrl) || cand.label.includes('m3u8');
+                showPlaybackError(
+                    baseUrl,
+                    isTsStream ? 'TS_CODEC_OR_CORS' : 'STREAM_UNAVAILABLE',
+                    summaryReason,
+                    sessionId
+                );
+                return;
+            }
 
-                document.getElementById('stage-engine-badge').innerText = shouldUseHls ? 'HLS (.m3u8)' : candKind;
+            const cand = candidates[candidateIdx];
+            const candUrl = cand.url;
+            const candKind = detectStreamKind(candUrl);
+            const shouldUseHls = candKind.includes('HLS') || isHlsCandidateUrl(candUrl) || cand.label.includes('m3u8');
 
-                let candidateFinished = false;
+            document.getElementById('stage-engine-badge').innerText = shouldUseHls ? 'HLS (.m3u8)' : candKind;
+            updateDiagnosticsUI(
+                candUrl,
+                shouldUseHls ? 'HLS (.m3u8)' : candKind,
+                `Deneniyor (${candidateIdx + 1}/${candidates.length}): ${cand.label}`
+            );
+
+            let candidateFinished = false;
                 const advanceToNextCandidate = () => {
                     if (candidateFinished || sessionId !== playSessionId || sessionSignal.aborted) return;
                     candidateFinished = true;
@@ -1837,6 +1791,7 @@
                 if (channel) cacheWorkingStreamUrl(channel, url);
                 document.getElementById('stage-engine-badge').innerText = streamKind;
                 document.getElementById('channel-info-status').innerText = `${streamKind} • Oynatılıyor (${elapsedMs}ms)`;
+                updateDiagnosticsUI(url, streamKind, 'Medya akışı hızlı açıldı.', elapsedMs);
                 if (channel) scheduleNeighborManifestPrefetch(channel);
                 try {
                     const p = video.play();
@@ -1872,6 +1827,10 @@
             }
         }
 
+        function updateDiagnosticsUI() {
+            // Oynatıcı altındaki tanı kutucukları kaldırıldı.
+        }
+
         function showPlaybackError(url, streamKind, errCode, reasonText, sessionId = playSessionId) {
             if (sessionId !== playSessionId) return;
             hideZapOsd();
@@ -1881,6 +1840,7 @@
             document.getElementById('error-overlay-reason').innerText = reasonText;
             document.getElementById('error-overlay-url').innerText = url || 'URL bulunamadı';
             document.getElementById('channel-info-status').innerText = 'Hata / Erişilemedi';
+            updateDiagnosticsUI(url, streamKind, `${errCode}: ${reasonText}`);
         }
 
         function retryCurrentChannelPlayback() {
@@ -2325,17 +2285,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadOrCreateDeviceIdentity();
+            loadSavedXtream();
             loadFavorites();
-            refreshFromPortal(false);
-
-            // Farklı sekme/tarayıcı veya bulut güncellemelerini düzenli kontrol et
-            setInterval(() => {
-                if (deviceIdentity && deviceIdentity.mac) {
-                    refreshFromPortal(false);
-                }
-            }, 4000);
-
             if (window.lucide && typeof window.lucide.createIcons === 'function') {
                 window.lucide.createIcons();
             }
